@@ -17,7 +17,6 @@ class AvailableMoviesCubit extends Cubit<AvailableMoviesState> {
     emit(state.copyWith(isLoading: true));
     final result = await getLatestMoviesUseCase();
     result.fold((error){
-      print("error type => ${error.runtimeType}");
       switch (error) {
         case NoInternetError():
           emit(
@@ -40,12 +39,11 @@ class AvailableMoviesCubit extends Cubit<AvailableMoviesState> {
             state.copyWith(
               isLoading: false,
               errorMessage: error.message,
-              internetAvailable: true, // or based on your logic
+              internetAvailable: true,
             ),
           );
       }
     }, (movies){
-      print("==> cubit movies $movies");
       emit(state.copyWith(isLoading: false, movies: movies));
     }
     );
