@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:movies/domain/app_error.dart';
 
-import '../model/movie.dart';
+import '../entity/movie_entity.dart';
 
 abstract class MovieRepository{
-  Either<Error,Future<List<MovieModel>>> getPopularMovies();
+  Future<Either<AppError,List<MovieEntity>>> getLatestMovies();
 }
