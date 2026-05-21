@@ -40,7 +40,7 @@ abstract class ThemeManager {
         color: ColorsManager.white,
       ),
       bodySmall: GoogleFonts.roboto(
-        fontSize: 16.sp,
+        fontSize: 12.sp,
         fontWeight: FontWeight.w400,
         color: ColorsManager.white,
       ),
