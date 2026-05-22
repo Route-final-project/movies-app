@@ -5,7 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/resource/colors_manager.dart';
 
 class AppTextField extends StatelessWidget {
-  const AppTextField({
+  AppTextField({
+    this.onTap,
+    this.focusNode,
     this.suffixIcon,
     required this.prefixIcon,
     this.obscureText = false,
@@ -29,13 +31,17 @@ class AppTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final int maxLines;
+  final FocusNode? focusNode;
   final void Function(String value)? onChanged;
+  final void Function()? onTap;
   final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
+      onTap: onTap,
       onChanged: onChanged,
       maxLines: maxLines,
       obscureText: obscureText,
@@ -51,6 +57,7 @@ class AppTextField extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: prefixIcon,
         ),
+        prefixIconConstraints: BoxConstraints(minWidth: 20.w, minHeight: 20.h),
         suffixIcon: suffixIcon != null
             ? Padding(
           padding: const EdgeInsets.all(8.0),

@@ -46,6 +46,12 @@ abstract class ThemeManager {
       ),
     ),
 
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      brightness: Brightness.dark,
+      primary: ColorsManager.gold,
+      secondary: ColorsManager.gold,
+    ),
+
     inputDecorationTheme: InputDecorationTheme(
       hintStyle: GoogleFonts.roboto(
         fontSize: 16.sp,

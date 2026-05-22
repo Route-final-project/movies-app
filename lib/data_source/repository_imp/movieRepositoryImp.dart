@@ -27,4 +27,17 @@ class MovieRepositoryImp implements MovieRepository {
       return Left(mapExceptionToError(e));
     }
   }
+
+  @override
+  Future<Either<AppError, List<MovieEntity>>> searchMovies(String query, int page) async {
+    try {
+      List<Movie> moviesList = await remoteDataSource.findMovies(query, page);
+      List<MovieEntity> movies = moviesList
+          .map((m) => m.toMovieEntity())
+          .toList();
+      return Right(movies);
+    } on RemoteAppException catch (e) {
+      return Left(mapExceptionToError(e));
+    }
+  }
 }
