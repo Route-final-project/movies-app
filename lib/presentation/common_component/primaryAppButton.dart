@@ -3,10 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../core/resource/colors_manager.dart';
 
 class PrimaryAppButton extends StatelessWidget {
-  PrimaryAppButton({
+  const PrimaryAppButton({
     required this.text,
     required this.onPressed,
     this.suffixIcon = const SizedBox(),
@@ -21,7 +20,7 @@ class PrimaryAppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: Theme.of(context).filledButtonTheme.style,
-      onPressed: () {},
+      onPressed: onPressed,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

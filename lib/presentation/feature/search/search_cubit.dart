@@ -22,7 +22,6 @@ class SearchCubit extends Cubit<SearchState> {
     : super(SearchState(movies: [])) {
     controller.addListener(() {
       if(controller.text.trim() == state.query){
-        print("==> query is the same");
         return;
       }
       if (controller.text != state.query){
@@ -42,9 +41,7 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void _findMovies(String query, int page) async {
-    print("==> query $query");
     if (query.isEmpty) {
-      print("==> query ");
       return;
     }
     emit(state.copyWith(query: query, isLoading: true));
@@ -54,7 +51,6 @@ class SearchCubit extends Cubit<SearchState> {
           emit(state.copyWith(isLoading: false, errorMessage: error.message)),
       (movies) {
         emit(state.copyWith(isLoading: false, movies: movies));
-        print(state);
       },
     );
   }
