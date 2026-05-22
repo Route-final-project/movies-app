@@ -9,7 +9,7 @@ import '../../../domain/entity/movie_entity.dart';
 import 'movieCard.dart';
 
 class AvailableMoviesCarousel extends StatefulWidget {
-  AvailableMoviesCarousel({
+  const AvailableMoviesCarousel({
     required this.movies,
     required this.onMovieClicked,
     super.key,
@@ -123,7 +123,7 @@ class AvailableMoviesCarouselShimmer extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   itemCount: 5,
-                  separatorBuilder: (_, __) => const SizedBox(width: 16),
+                  separatorBuilder: (_, _) => const SizedBox(width: 16),
                   itemBuilder: (_, index) {
                     return Shimmer.fromColors(
                       baseColor: Colors.grey.shade800,

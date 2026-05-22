@@ -2,6 +2,7 @@
 import '../../app_exception.dart';
 
 sealed class RemoteAppException extends AppException {
+  @override
   final String message;
   RemoteAppException(this.message): super(message);
 }

@@ -35,6 +35,7 @@ class AvailableMoviesCubit extends Cubit<AvailableMoviesState> {
           );
 
         case LocalError():
+        case AuthError():
           emit(
             state.copyWith(
               isLoading: false,

@@ -1,11 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies/dependency_injection/di.dart';
-import 'package:movies/presentation/mainAppScreen.dart';
+import 'package:movies/firebase_options.dart';
+import 'package:movies/presentation/feature/auth/login_screen.dart';
 
 import 'config/theme/theme_manager.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   configureDependencies();
   runApp(const MoviesApp());
 }
@@ -13,7 +17,6 @@ void main() {
 class MoviesApp extends StatelessWidget {
   const MoviesApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -25,7 +28,7 @@ class MoviesApp extends StatelessWidget {
           title: 'Movies App',
           debugShowCheckedModeBanner: false,
           theme: ThemeManager.appTheme,
-          home: const MainAppScreen(),
+          home: const LoginScreen(),
         );
       },
     );
