@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/resource/colors_manager.dart';
 
 class SecondaryAppButton extends StatelessWidget {
-  SecondaryAppButton({
+  const SecondaryAppButton({
     required this.text,
     required this.onPressed,
     this.suffixIcon = const SizedBox(),

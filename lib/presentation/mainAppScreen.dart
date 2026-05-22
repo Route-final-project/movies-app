@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movies/presentation/feature/home/homeScreen.dart';
-import 'feature/home/movieCard.dart';
 
 class MainAppScreen extends StatelessWidget {
   const MainAppScreen({super.key});
@@ -9,5 +8,4 @@ class MainAppScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(child: HomeScreen()));
   }
-
 }

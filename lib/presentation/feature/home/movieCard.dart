@@ -5,7 +5,7 @@ import 'package:movies/core/resource/colors_manager.dart';
 import 'package:movies/domain/entity/movie_entity.dart';
 
 class MovieCard extends StatelessWidget {
-  MovieCard({required this.movie, required this.onTap, super.key});
+  const MovieCard({required this.movie, required this.onTap, super.key});
 
   final MovieEntity movie;
   final void Function(int id) onTap;
