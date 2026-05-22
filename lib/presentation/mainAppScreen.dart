@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,7 +28,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
+      extendBody: true,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
         padding: const EdgeInsets.all(8.0),
         child: AppBottomNavigationBar(
           currentIndex: _currentIndex,
@@ -38,7 +41,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
           },
         ),
       ),
-      body: SafeArea(child: _screens[_currentIndex]),
+      body: SafeArea(
+          child: IndexedStack(index: _currentIndex, children: _screens),
+      ),
     );
   }
 }
