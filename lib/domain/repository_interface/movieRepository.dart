@@ -5,4 +5,5 @@ import '../entity/movie_entity.dart';
 
 abstract class MovieRepository{
   Future<Either<AppError,List<MovieEntity>>> getLatestMovies();
+  Future<Either<AppError,List<MovieEntity>>> searchMovies(String query, int page);
 }

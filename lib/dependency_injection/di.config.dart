@@ -18,8 +18,10 @@ import '../data_source/remote_data_source/remoteDataSource.dart' as _i514;
 import '../data_source/repository_imp/movieRepositoryImp.dart' as _i288;
 import '../domain/repository_interface/movieRepository.dart' as _i603;
 import '../domain/usecase/get_latest_movies_use_case.dart' as _i729;
+import '../domain/usecase/search_movies_use_case.dart' as _i762;
 import '../presentation/feature/home/available_movies_cubit/available_movies_cubit.dart'
     as _i774;
+import '../presentation/feature/search/search_cubit.dart' as _i962;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -41,6 +43,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i729.GetLatestMoviesUseCase>(
       () => _i729.GetLatestMoviesUseCase(
         movieRepository: gh<_i603.MovieRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i762.SearchMoviesUseCase>(
+      () => _i762.SearchMoviesUseCase(
+        movieRepository: gh<_i603.MovieRepository>(),
+      ),
+    );
+    gh.factory<_i962.SearchCubit>(
+      () => _i962.SearchCubit(
+        searchMoviesUseCase: gh<_i762.SearchMoviesUseCase>(),
       ),
     );
     gh.factory<_i774.AvailableMoviesCubit>(
