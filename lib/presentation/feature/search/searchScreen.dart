@@ -28,11 +28,13 @@ class _SearchScreenState extends State<SearchScreen> {
       (timeStamp) => textFieldFocus.requestFocus(),
     );
   }
+
   @override
   void dispose() {
     super.dispose();
     textFieldFocus.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -55,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                   hintText: "Search",
-                  validator: (_) {},
+                  validator: (_) => null,
                   onChanged: (value) {},
                   onTap: () {},
                 ),
@@ -100,12 +102,13 @@ class _SearchScreenState extends State<SearchScreen> {
                         onTap: (int id) {},
                       );
                     },
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 0.7,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.7,
+                        ),
                     itemCount: BlocProvider.of<SearchCubit>(context).isLoading
                         ? state.movies.length + 2
                         : state.movies.length,

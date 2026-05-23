@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/resource/colors_manager.dart';
 
 class AppTextField extends StatelessWidget {
-  AppTextField({
+  const AppTextField({
     this.onTap,
     this.focusNode,
     this.suffixIcon,
@@ -60,11 +59,9 @@ class AppTextField extends StatelessWidget {
         prefixIconConstraints: BoxConstraints(minWidth: 20.w, minHeight: 20.h),
         suffixIcon: suffixIcon != null
             ? Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-              onTap: onSuffixClicked,
-              child: suffixIcon),
-        )
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(onTap: onSuffixClicked, child: suffixIcon),
+              )
             : null,
       ),
     );

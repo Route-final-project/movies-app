@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,7 +41,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         ),
       ),
       body: SafeArea(
-          child: IndexedStack(index: _currentIndex, children: _screens),
+        child: IndexedStack(index: _currentIndex, children: _screens),
       ),
     );
   }
@@ -50,7 +49,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
 @immutable
 class AppBottomNavigationBar extends StatelessWidget {
-  AppBottomNavigationBar({
+  const AppBottomNavigationBar({
     required this.currentIndex,
     required this.onDestinationSelected,
     super.key,
