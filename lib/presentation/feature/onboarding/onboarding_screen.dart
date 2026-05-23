@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/resource/app_preferences_keys.dart';
+import '../../common_component/primaryAppButton.dart';
 import '../auth/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -66,8 +70,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
-  void _goNext() {
+  Future<void> _goNext() async {
     if (_pageIndex == _pages.length - 1) {
+      final preferences = await SharedPreferences.getInstance();
+      await preferences.setBool(AppPreferencesKeys.hasSeenOnboarding, true);
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreen()),
@@ -184,11 +192,13 @@ class _OnboardingPage extends StatelessWidget {
                     ),
                   ],
                   SizedBox(height: 21 * unit),
-                  _OnboardingButton(
-                    text: data.primaryButtonText,
-                    onPressed: onNext,
-                    filled: true,
-                    unit: unit,
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55.h,
+                    child: PrimaryAppButton(
+                      text: data.primaryButtonText,
+                      onPressed: onNext,
+                    ),
                   ),
                   if (data.showBack) ...[
                     SizedBox(height: 12 * unit),
