@@ -1,28 +1,36 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies/dependency_injection/di.dart';
+import 'package:movies/firebase_options.dart';
+import 'package:movies/presentation/feature/onboarding/splash_screen.dart';
 
-import 'presentation/feature/onboarding/splash_screen.dart';
+import 'config/theme/theme_manager.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  configureDependencies();
+  runApp(const MoviesApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MoviesApp extends StatelessWidget {
+  const MoviesApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Movies App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFF121312),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFF6BD00),
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-      ),
-      home: const SplashScreen(),
+    return ScreenUtilInit(
+      designSize: const Size(430, 932),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'Movies App',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeManager.appTheme,
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }

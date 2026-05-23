@@ -1,0 +1,134 @@
+{
+  "project_info": {
+    "project_number": "341287897612",
+    "project_id": "movie-route-project",
+    "storage_bucket": "movie-route-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341287897612:android:186a2898ebc99d44ca3c29",
+        "android_client_info": {
+          "package_name": "com.example.movies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341287897612-7ipl4r5h08lq81nkai03emeibogpdb8b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.movies",
+            "certificate_hash": "78547fdbc7f54a864473d44b6e34bad8fdf93ac3"
+          }
+        },
+        {
+          "client_id": "341287897612-0apaa02t44ot9tfpd201rtfb2gj21k4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw0fzmn2ZGJvVO8dTAkFe7DH8OZ4v6iO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341287897612-0apaa02t44ot9tfpd201rtfb2gj21k4i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "341287897612-eegksl1ni3k5v8rfekhm7m9ht8veg35g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.movies"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341287897612:android:c730eb88523c9819ca3c29",
+        "android_client_info": {
+          "package_name": "route.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341287897612-s1jet3o7950f9b9s749uv760rb0mth8l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "route.project",
+            "certificate_hash": "78547fdbc7f54a864473d44b6e34bad8fdf93ac3"
+          }
+        },
+        {
+          "client_id": "341287897612-0apaa02t44ot9tfpd201rtfb2gj21k4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw0fzmn2ZGJvVO8dTAkFe7DH8OZ4v6iO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341287897612-0apaa02t44ot9tfpd201rtfb2gj21k4i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "341287897612-eegksl1ni3k5v8rfekhm7m9ht8veg35g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.movies"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341287897612:android:f9b26730cc1a2515ca3c29",
+        "android_client_info": {
+          "package_name": "route.project.final"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341287897612-0apaa02t44ot9tfpd201rtfb2gj21k4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw0fzmn2ZGJvVO8dTAkFe7DH8OZ4v6iO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341287897612-0apaa02t44ot9tfpd201rtfb2gj21k4i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "341287897612-eegksl1ni3k5v8rfekhm7m9ht8veg35g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.movies"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
