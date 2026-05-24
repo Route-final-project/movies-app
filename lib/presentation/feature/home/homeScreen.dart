@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/resource/colors_manager.dart';
 import '../../../dependency_injection/di.dart';
+import '../../../domain/usecase/add_movie_to_history_use_case.dart';
 import '../../../domain/usecase/get_latest_movies_use_case.dart';
 import 'availableMoviesCarousel.dart';
 import 'available_movies_cubit/available_movies_cubit.dart';
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocProvider(
       create: (context) => AvailableMoviesCubit(
         getLatestMoviesUseCase: getIt.get<GetLatestMoviesUseCase>(),
+        addMovieToHistoryUseCase: getIt.get<AddMovieToHistoryUseCase>(),
       )..getAvailableMovies(),
       child: Column(
         children: [
@@ -51,7 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
               } else {
                 return AvailableMoviesCarousel(
                   movies: state.movies,
-                  onMovieClicked: (movie) => {},
+                  onMovieClicked: (movie) => context
+                      .read<AvailableMoviesCubit>()
+                      .recordMovieInHistory(movie),
                 );
               }
             },

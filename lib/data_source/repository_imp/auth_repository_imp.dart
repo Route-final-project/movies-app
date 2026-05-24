@@ -18,8 +18,12 @@ class AuthRepositoryImp implements AuthRepository {
 
   @override
   Future<Either<AppError, AuthEntity>> register(
-          String name, String email, String password) =>
-      _run(() => _dataSource.register(name, email, password));
+    String name,
+    String email,
+    String password,
+    String phone,
+    int avatarId,
+  ) => _run(() => _dataSource.register(name, email, password, phone, avatarId));
 
   @override
   Future<Either<AppError, AuthEntity>> signInWithGoogle() =>
@@ -37,8 +41,33 @@ class AuthRepositoryImp implements AuthRepository {
     }
   }
 
+  @override
+  Future<Either<AppError, void>> signOut() async {
+    try {
+      await _dataSource.signOut();
+      return const Right(null);
+    } on FirebaseAuthException catch (e) {
+      return Left(AuthError(_mapError(e)));
+    } catch (e) {
+      return Left(AuthError(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<AppError, void>> deleteAccount() async {
+    try {
+      await _dataSource.deleteAccount();
+      return const Right(null);
+    } on FirebaseAuthException catch (e) {
+      return Left(AuthError(_mapError(e)));
+    } catch (e) {
+      return Left(AuthError(e.toString()));
+    }
+  }
+
   Future<Either<AppError, AuthEntity>> _run(
-      Future<AuthEntity> Function() fn) async {
+    Future<AuthEntity> Function() fn,
+  ) async {
     try {
       return Right(await fn());
     } on FirebaseAuthException catch (e) {
@@ -68,6 +97,8 @@ class AuthRepositoryImp implements AuthRepository {
         return 'Too many attempts. Please try again later.';
       case 'cancelled':
         return 'Sign in was cancelled.';
+      case 'requires-recent-login':
+        return 'Please log out and log in again before deleting your account.';
       default:
         return e.message ?? 'Authentication failed.';
     }

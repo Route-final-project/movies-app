@@ -84,61 +84,48 @@ abstract class ThemeManager {
         borderSide: BorderSide(color: ColorsManager.grey),
       ),
     ),
-    iconTheme: IconThemeData(
-      color: ColorsManager.white,
-      size: 26.sp,
-    ),
+    iconTheme: IconThemeData(color: ColorsManager.white, size: 26.sp),
     filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: ColorsManager.gold,
-          foregroundColor: ColorsManager.black,
-          iconColor: ColorsManager.black,
-          iconSize: 26.sp,
-          padding: EdgeInsets.all(8.sp),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.r),
-          ),
-          textStyle: GoogleFonts.roboto(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.w400,
-          ),
-        )
-    ),
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: ColorsManager.grey,
-        // labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
-        //       (states) {
-        //     if (states.contains(WidgetState.selected)) {
-        //       return const TextStyle(
-        //         color: Colors.white,
-        //         fontWeight: FontWeight.bold,
-        //       );
-        //     }
-        //
-        //     return const TextStyle(
-        //       color: Colors.grey,
-        //     );
-        //   },
-        // ),
-
-        iconTheme:
-        WidgetStateProperty.resolveWith<IconThemeData>(
-              (states) {
-            if (states.contains(WidgetState.selected)) {
-              return const IconThemeData(
-                color: ColorsManager.gold,
-                size: 28,
-              );
-            }
-
-            return const IconThemeData(
-              color: ColorsManager.white,
-              size: 24,
-            );
-          },
+      style: FilledButton.styleFrom(
+        backgroundColor: ColorsManager.gold,
+        foregroundColor: ColorsManager.black,
+        iconColor: ColorsManager.black,
+        iconSize: 26.sp,
+        padding: EdgeInsets.all(8.sp),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.r),
+        ),
+        textStyle: GoogleFonts.roboto(
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w400,
         ),
       ),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: ColorsManager.grey,
 
+      // labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
+      //       (states) {
+      //     if (states.contains(WidgetState.selected)) {
+      //       return const TextStyle(
+      //         color: Colors.white,
+      //         fontWeight: FontWeight.bold,
+      //       );
+      //     }
+      //
+      //     return const TextStyle(
+      //       color: Colors.grey,
+      //     );
+      //   },
+      // ),
+      iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const IconThemeData(color: ColorsManager.gold, size: 28);
+        }
+
+        return const IconThemeData(color: ColorsManager.white, size: 24);
+      }),
+    ),
   );
 
   //  bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -156,7 +143,4 @@ abstract class ThemeManager {
   //    showSelectedLabels: false,
   //    showUnselectedLabels: false,
   //  )
-
-  }
-
-
+}
