@@ -16,35 +16,35 @@ import '../../../config/path_argument.dart';
 import '../../../core/resource/assets_manager.dart';
 import '../../../core/resource/routes_manager.dart';
 import '../../../dependency_injection/di.dart';
-import '../../../domain/entity/movie_entity.dart';
 import '../home/movieCard.dart';
 
 class MovieDetailScreen extends StatelessWidget {
-  const MovieDetailScreen({required this.movieEntity, super.key});
+  const MovieDetailScreen({required this.movieId, super.key});
 
-  final MovieEntity movieEntity;
+  final int movieId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          MovieDetailCubit(
-            getMovieDetailsByIdUserCase: getIt<GetMovieDetailsByIdUserCase>(),
-            getSimilarMoviesUseCase: getIt<GetSimilarMoviesUseCase>(),
-            movieId: movieEntity.id,
-          ),
+      create: (context) => MovieDetailCubit(
+        getMovieDetailsByIdUserCase: getIt<GetMovieDetailsByIdUserCase>(),
+        getSimilarMoviesUseCase: getIt<GetSimilarMoviesUseCase>(),
+        movieId: movieId,
+      ),
       child: BlocListener<MovieDetailCubit, MovieUiState>(
         listener: (context, state) {
-          if(state.trailerErrorMessage.isNotEmpty){
+          if (state.trailerErrorMessage.isNotEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.trailerErrorMessage))
+              SnackBar(content: Text(state.trailerErrorMessage)),
             );
           }
         },
         child: BlocBuilder<MovieDetailCubit, MovieUiState>(
           builder: (context, state) {
             if (state.isLoading) {
-              return Scaffold(body: Center(child: CircularProgressIndicator()));
+              return Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
             } else if (state.errorMessage.isNotEmpty) {
               Scaffold(body: Center(child: Text(state.errorMessage)));
             }
@@ -98,11 +98,11 @@ class MovieDetailScreen extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl: state.imageUrl,
-                            placeholder: (context, url) =>
-                                Center(
-                                    child: const CircularProgressIndicator()),
+                            placeholder: (context, url) => Center(
+                              child: const CircularProgressIndicator(),
+                            ),
                             errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                                const Icon(Icons.error),
                             fit: BoxFit.cover,
                             width: double.infinity,
                           ),
@@ -111,7 +111,10 @@ class MovieDetailScreen extends StatelessWidget {
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [Color(0x33121312), Color(0xFF121312)],
+                                colors: [
+                                  Color(0x33121312),
+                                  Color(0xFF121312),
+                                ],
                               ),
                             ),
                           ),
@@ -132,7 +135,11 @@ class MovieDetailScreen extends StatelessWidget {
                   ),
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 18.0, right: 16.0, left: 16.0),
+                      padding: const EdgeInsets.only(
+                        bottom: 18.0,
+                        right: 16.0,
+                        left: 16.0,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -145,18 +152,18 @@ class MovieDetailScreen extends StatelessWidget {
                           Text(
                             state.details?.year ?? "",
                             textAlign: TextAlign.center,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(
-                              color: Color(0xFFADADAD),
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(color: Color(0xFFADADAD)),
                           ),
                           SizedBox(height: 10.h),
-                          SecondaryAppButton(text: "Watch", onPressed: () {
-                            BlocProvider.of<MovieDetailCubit>(context).openYtTrailer();
-                          }),
+                          SecondaryAppButton(
+                            text: "Watch",
+                            onPressed: () {
+                              BlocProvider.of<MovieDetailCubit>(
+                                context,
+                              ).openYtTrailer();
+                            },
+                          ),
                           SizedBox(height: 10.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -176,17 +183,24 @@ class MovieDetailScreen extends StatelessWidget {
                             ],
                           ),
                           TitleSection(title: "Screen Shots"),
-                          ...state.details?.screenshotImagesUrl.map((imageUrl) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16.r),
-                                child: CachedNetworkImage(imageUrl: imageUrl),
-                              ),
-                            );
-                          }).toList() ??
+                          ...state.details?.screenshotImagesUrl.map((
+                                imageUrl,
+                              ) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                    child: CachedNetworkImage(
+                                      imageUrl: imageUrl,
+                                    ),
+                                  ),
+                                );
+                              }).toList() ??
                               [],
-                          TitleSection(title: "Similar"),
+                          Visibility(
+                            visible: state.similarMovies.isNotEmpty,
+                            child: TitleSection(title: "Similar"),
+                          ),
                           BlocBuilder<MovieDetailCubit, MovieUiState>(
                             builder: (context, state) {
                               if (state.isSimilarMoviesLoading) {
@@ -202,20 +216,24 @@ class MovieDetailScreen extends StatelessWidget {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: state.similarMovies.length,
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisSpacing: 16.w,
-                                  mainAxisSpacing: 16.h,
-                                  childAspectRatio: 0.7,
-                                  crossAxisCount: 2,
-                                ),
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisSpacing: 16.w,
+                                      mainAxisSpacing: 16.h,
+                                      childAspectRatio: 0.7,
+                                      crossAxisCount: 2,
+                                    ),
                                 itemBuilder: (context, index) {
-                                  var currentMovie = state.similarMovies[index];
+                                  var currentMovie =
+                                      state.similarMovies[index];
                                   return MovieCard(
-                                    onTap: (movie) {
+                                    onTap: (_) {
                                       Navigator.pushNamed(
                                         context,
                                         RoutesManger.movieDetailScreen,
-                                        arguments: {PathArguments.movieDetail: movie},
+                                        arguments: {
+                                          PathArguments.movieId:
+                                              currentMovie.id,
+                                        },
                                       );
                                     },
                                     movie: currentMovie,
@@ -227,15 +245,12 @@ class MovieDetailScreen extends StatelessWidget {
                           TitleSection(title: "Summary"),
                           Text(
                             state.details?.summary ?? "",
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodyMedium,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           TitleSection(title: "Cast"),
                           ...state.details?.cast.map((cast) {
-                            return CastMemberCard(cast: cast);
-                          }) ??
+                                return CastMemberCard(cast: cast);
+                              }) ??
                               [],
                           TitleSection(title: "Genres"),
 
@@ -243,32 +258,29 @@ class MovieDetailScreen extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 2.7,
-                              mainAxisSpacing: 16.h,
-                              crossAxisSpacing: 16.w,
-                            ),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 2.7,
+                                  mainAxisSpacing: 16.h,
+                                  crossAxisSpacing: 16.w,
+                                ),
                             itemCount: state.details?.genres.length ?? 0,
                             itemBuilder: (context, index) {
                               return Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(16.r),
-                                  color: Theme
-                                      .of(
+                                  color: Theme.of(
                                     context,
-                                  )
-                                      .colorScheme
-                                      .surfaceContainer,
+                                  ).colorScheme.surfaceContainer,
                                 ),
                                 child: Text(
                                   state.details?.genres[index] ?? "",
                                   overflow: TextOverflow.ellipsis,
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .bodyMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.bodyMedium,
                                 ),
                               );
                             },
@@ -286,4 +298,3 @@ class MovieDetailScreen extends StatelessWidget {
     );
   }
 }
-
