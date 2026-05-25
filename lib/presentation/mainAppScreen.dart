@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,6 +34,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         child: AppBottomNavigationBar(
           currentIndex: _currentIndex,
           onDestinationSelected: (index) {
+            FocusScope.of(context).unfocus();
             setState(() {
               _currentIndex = index;
             });
