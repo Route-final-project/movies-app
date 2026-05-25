@@ -192,6 +192,7 @@ class MovieDetailScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(16.r),
                                     child: CachedNetworkImage(
                                       imageUrl: imageUrl,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 );

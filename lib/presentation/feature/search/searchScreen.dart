@@ -106,7 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           FocusScope.of(context).unfocus();
                           Navigator.of(context).pushNamed(
                             RoutesManger.movieDetailScreen,
-                            arguments: {PathArguments.movieDetail: state.movies[index]},
+                            arguments: {PathArguments.movieId: state.movies[index].id},
                           );
                         },
                       );
