@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:movies/config/path_argument.dart';
 import 'package:movies/domain/entity/movie_entity.dart';
 import 'package:movies/presentation/feature/auth/forget_password_screen.dart';
 import 'package:movies/presentation/feature/auth/login_screen.dart';
@@ -24,9 +25,7 @@ abstract class RoutesManger {
     mainAppScreenRoute : (_) => const MainAppScreen(),
     movieDetailScreen: (context) {
       Map<String, dynamic> argument = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
-      print("==> movie requested: ${argument["movieEntity"].toString()}");
-      return MovieDetailScreen(movieEntity: argument["movieEntity"]);
+      return MovieDetailScreen(movieId: argument[PathArguments.movieId]);
     }
   };
 }

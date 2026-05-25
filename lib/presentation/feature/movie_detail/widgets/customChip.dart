@@ -16,14 +16,8 @@ class CustomChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      label: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SvgPicture.asset(svgIconAsset),
-          SizedBox(width: 12.w),
-          Text(value),
-        ],
-      ),
+      avatar: SvgPicture.asset(svgIconAsset),
+      label: Text(value),
     );
   }
 }

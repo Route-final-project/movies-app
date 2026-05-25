@@ -1,4 +1,4 @@
 
 class PathArguments {
-  static final String movieDetail = "movieEntity";
+  static final String movieId = "movie_id";
 }

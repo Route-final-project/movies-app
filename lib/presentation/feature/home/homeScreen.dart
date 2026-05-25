@@ -52,11 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
               } else {
                 return AvailableMoviesCarousel(
                   movies: state.movies,
-                  onMovieClicked: (movie) => {
+                  onMovieClicked: (movieUiState) => {
                     Navigator.pushNamed(
                       context,
                       RoutesManger.movieDetailScreen,
-                      arguments: {PathArguments.movieDetail: movie},
+                      arguments: {PathArguments.movieId: movieUiState.id},
                     ),
                   },
                 );
