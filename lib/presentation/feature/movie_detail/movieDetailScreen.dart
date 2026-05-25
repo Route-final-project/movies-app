@@ -13,6 +13,7 @@ import 'package:movies/presentation/feature/movie_detail/widgets/customChip.dart
 import 'package:movies/presentation/feature/movie_detail/widgets/titleSection.dart';
 
 import '../../../config/path_argument.dart';
+import '../../../core/resource/assets_manager.dart';
 import '../../../core/resource/routes_manager.dart';
 import '../../../dependency_injection/di.dart';
 import '../../../domain/entity/movie_entity.dart';
@@ -83,7 +84,7 @@ class MovieDetailScreen extends StatelessWidget {
                                       : ColorsManager.white,
                                   BlendMode.srcIn,
                                 ),
-                                'assets/icons/bookmark_icon.svg',
+                                IconAssets.bookMarkIcon,
                               ),
                             ),
                           );
@@ -94,7 +95,6 @@ class MovieDetailScreen extends StatelessWidget {
                     flexibleSpace: FlexibleSpaceBar(
                       background: Stack(
                         alignment: Alignment.center,
-                        // fit: StackFit.expand,
                         children: [
                           CachedNetworkImage(
                             imageUrl: state.imageUrl,
@@ -120,7 +120,7 @@ class MovieDetailScreen extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SvgPicture.asset(
-                                ,
+                                IconAssets.playIcon,
                                 width: 97.w,
                                 height: 97.h,
                               ),
@@ -163,15 +163,15 @@ class MovieDetailScreen extends StatelessWidget {
                             children: [
                               CustomChip(
                                 value: state.details?.likeCount ?? "",
-                                svgIconAsset: "assets/icons/like_count_icon.svg",
+                                svgIconAsset: IconAssets.likeCountIcon,
                               ),
                               CustomChip(
                                 value: state.details?.runtime ?? "",
-                                svgIconAsset: "assets/icons/watch_count_icon.svg",
+                                svgIconAsset: IconAssets.watchCountIcon,
                               ),
                               CustomChip(
                                 value: state.rating,
-                                svgIconAsset: "assets/icons/star_count_icon.svg",
+                                svgIconAsset: IconAssets.starCountIcon,
                               ),
                             ],
                           ),

@@ -15,5 +15,12 @@ abstract class ImageAssets{
 abstract class IconAssets{
   static const String _baseIcons = "assets/icons/";
   static const String searchIcon = "${_baseIcons}search_icon.svg";
+  static const String bookMarkIcon =   'assets/icons/bookmark_icon.svg';
+  static const String  playIcon = "assets/icons/play_icon.svg";
+
+  static String likeCountIcon = "assets/icons/like_count_icon.svg";
+  static String watchCountIcon = "assets/icons/watch_count_icon.svg";
+  static String starCountIcon = "assets/icons/star_count_icon.svg";
+
 
 }
