@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies/core/resource/colors_manager.dart';
 import 'package:movies/domain/entity/movie_entity.dart';
+import 'package:movies/presentation/feature/movie_detail/movie_detail_cubit.dart';
 
 class MovieCard extends StatelessWidget {
   const MovieCard({required this.movie, required this.onTap, super.key});
 
-  final MovieEntity movie;
+  final MovieUiState movie;
   final void Function(int id) onTap;
 
   @override
