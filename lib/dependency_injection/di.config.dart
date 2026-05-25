@@ -26,6 +26,8 @@ import '../domain/repository_interface/auth_repository.dart' as _i432;
 import '../domain/repository_interface/movieRepository.dart' as _i603;
 import '../domain/usecase/forget_password_use_case.dart' as _i598;
 import '../domain/usecase/get_latest_movies_use_case.dart' as _i729;
+import '../domain/usecase/get_movie_details_by_id_user_case.dart' as _i814;
+import '../domain/usecase/get_similar_movies_use_case.dart' as _i910;
 import '../domain/usecase/google_sign_in_use_case.dart' as _i804;
 import '../domain/usecase/register_use_case.dart' as _i491;
 import '../domain/usecase/search_movies_use_case.dart' as _i762;
@@ -33,6 +35,7 @@ import '../domain/usecase/sign_in_use_case.dart' as _i50;
 import '../presentation/feature/auth/cubit/auth_cubit.dart' as _i1060;
 import '../presentation/feature/home/available_movies_cubit/available_movies_cubit.dart'
     as _i774;
+import '../presentation/feature/movie_detail/movie_detail_cubit.dart' as _i1058;
 import '../presentation/feature/search/search_cubit.dart' as _i962;
 import 'firebase_module.dart' as _i616;
 
@@ -65,8 +68,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i432.AuthRepository>(
       () => _i780.AuthRepositoryImp(gh<_i770.AuthRemoteDataSource>()),
     );
+    gh.lazySingleton<_i814.GetMovieDetailsByIdUserCase>(
+      () => _i814.GetMovieDetailsByIdUserCase(gh<_i603.MovieRepository>()),
+    );
     gh.lazySingleton<_i729.GetLatestMoviesUseCase>(
       () => _i729.GetLatestMoviesUseCase(
+        movieRepository: gh<_i603.MovieRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i910.GetSimilarMoviesUseCase>(
+      () => _i910.GetSimilarMoviesUseCase(
         movieRepository: gh<_i603.MovieRepository>(),
       ),
     );
@@ -89,6 +100,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i50.SignInUseCase>(
       () => _i50.SignInUseCase(authRepository: gh<_i432.AuthRepository>()),
+    );
+    gh.factory<_i1058.MovieDetailCubit>(
+      () => _i1058.MovieDetailCubit(
+        getMovieDetailsByIdUserCase: gh<_i814.GetMovieDetailsByIdUserCase>(),
+        getSimilarMoviesUseCase: gh<_i910.GetSimilarMoviesUseCase>(),
+        movieId: gh<int>(),
+      ),
     );
     gh.factory<_i962.SearchCubit>(
       () => _i962.SearchCubit(
