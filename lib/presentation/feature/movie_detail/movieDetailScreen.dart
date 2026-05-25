@@ -12,6 +12,8 @@ import 'package:movies/presentation/feature/movie_detail/widgets/castMemberCard.
 import 'package:movies/presentation/feature/movie_detail/widgets/customChip.dart';
 import 'package:movies/presentation/feature/movie_detail/widgets/titleSection.dart';
 
+import '../../../config/path_argument.dart';
+import '../../../core/resource/routes_manager.dart';
 import '../../../dependency_injection/di.dart';
 import '../../../domain/entity/movie_entity.dart';
 import '../home/movieCard.dart';
@@ -45,7 +47,6 @@ class MovieDetailScreen extends StatelessWidget {
             } else if (state.errorMessage.isNotEmpty) {
               Scaffold(body: Center(child: Text(state.errorMessage)));
             }
-            print("==> state ${state.toString()}");
             return Scaffold(
               extendBodyBehindAppBar: true,
               body: CustomScrollView(
@@ -119,7 +120,7 @@ class MovieDetailScreen extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SvgPicture.asset(
-                                "assets/icons/play_icon.svg",
+                                ,
                                 width: 97.w,
                                 height: 97.h,
                               ),
@@ -130,141 +131,150 @@ class MovieDetailScreen extends StatelessWidget {
                     ),
                   ),
                   SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(height: 10.h),
-                        Text(
-                          state.details?.title ?? "",
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          state.details?.year ?? "",
-                          textAlign: TextAlign.center,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(
-                            color: Color(0xFFADADAD),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 18.0, right: 16.0, left: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(height: 10.h),
+                          Text(
+                            state.details?.title ?? "",
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        SizedBox(height: 10.h),
-                        SecondaryAppButton(text: "Watch", onPressed: () {
-                          BlocProvider.of<MovieDetailCubit>(context).openYtTrailer();
-                        }),
-                        SizedBox(height: 10.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomChip(
-                              value: state.details?.likeCount ?? "",
-                              svgIconAsset: "assets/icons/like_count_icon.svg",
+                          SizedBox(height: 10.h),
+                          Text(
+                            state.details?.year ?? "",
+                            textAlign: TextAlign.center,
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                              color: Color(0xFFADADAD),
                             ),
-                            CustomChip(
-                              value: state.details?.runtime ?? "",
-                              svgIconAsset: "assets/icons/watch_count_icon.svg",
-                            ),
-                            CustomChip(
-                              value: state.rating,
-                              svgIconAsset: "assets/icons/star_count_icon.svg",
-                            ),
-                          ],
-                        ),
-                        TitleSection(title: "Screen Shots"),
-                        ...state.details?.screenshotImagesUrl.map((imageUrl) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16.r),
-                              child: CachedNetworkImage(imageUrl: imageUrl),
-                            ),
-                          );
-                        }).toList() ??
-                            [],
-                        TitleSection(title: "Similar"),
-                        BlocBuilder<MovieDetailCubit, MovieUiState>(
-                          builder: (context, state) {
-                            if (state.isSimilarMoviesLoading) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (state.errorMessage.isNotEmpty) {
-                              return Text(state.errorMessage);
-                            }
-                            return GridView.builder(
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: state.similarMovies.length,
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisSpacing: 16.w,
-                                mainAxisSpacing: 16.h,
-                                childAspectRatio: 0.7,
-                                crossAxisCount: 2,
+                          ),
+                          SizedBox(height: 10.h),
+                          SecondaryAppButton(text: "Watch", onPressed: () {
+                            BlocProvider.of<MovieDetailCubit>(context).openYtTrailer();
+                          }),
+                          SizedBox(height: 10.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomChip(
+                                value: state.details?.likeCount ?? "",
+                                svgIconAsset: "assets/icons/like_count_icon.svg",
                               ),
-                              itemBuilder: (context, index) {
-                                var currentMovie = state.similarMovies[index];
-                                return MovieCard(
-                                  onTap: (_) {},
-                                  movie: currentMovie,
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        TitleSection(title: "Summary"),
-                        Text(
-                          state.details?.summary ?? "",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyMedium,
-                        ),
-                        TitleSection(title: "Cast"),
-                        ...state.details?.cast.map((cast) {
-                          return CastMemberCard(cast: cast);
-                        }) ??
-                            [],
-                        TitleSection(title: "Genres"),
-
-                        GridView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 2.7,
-                            mainAxisSpacing: 16.h,
-                            crossAxisSpacing: 16.w,
+                              CustomChip(
+                                value: state.details?.runtime ?? "",
+                                svgIconAsset: "assets/icons/watch_count_icon.svg",
+                              ),
+                              CustomChip(
+                                value: state.rating,
+                                svgIconAsset: "assets/icons/star_count_icon.svg",
+                              ),
+                            ],
                           ),
-                          itemCount: state.details?.genres.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
+                          TitleSection(title: "Screen Shots"),
+                          ...state.details?.screenshotImagesUrl.map((imageUrl) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(16.r),
-                                color: Theme
-                                    .of(
-                                  context,
-                                )
-                                    .colorScheme
-                                    .surfaceContainer,
-                              ),
-                              child: Text(
-                                state.details?.genres[index] ?? "",
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyMedium,
+                                child: CachedNetworkImage(imageUrl: imageUrl),
                               ),
                             );
-                          },
-                        ),
-                      ],
+                          }).toList() ??
+                              [],
+                          TitleSection(title: "Similar"),
+                          BlocBuilder<MovieDetailCubit, MovieUiState>(
+                            builder: (context, state) {
+                              if (state.isSimilarMoviesLoading) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (state.errorMessage.isNotEmpty) {
+                                return Text(state.errorMessage);
+                              }
+                              return GridView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: state.similarMovies.length,
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisSpacing: 16.w,
+                                  mainAxisSpacing: 16.h,
+                                  childAspectRatio: 0.7,
+                                  crossAxisCount: 2,
+                                ),
+                                itemBuilder: (context, index) {
+                                  var currentMovie = state.similarMovies[index];
+                                  return MovieCard(
+                                    onTap: (movie) {
+                                      Navigator.pushNamed(
+                                        context,
+                                        RoutesManger.movieDetailScreen,
+                                        arguments: {PathArguments.movieDetail: movie},
+                                      );
+                                    },
+                                    movie: currentMovie,
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          TitleSection(title: "Summary"),
+                          Text(
+                            state.details?.summary ?? "",
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .bodyMedium,
+                          ),
+                          TitleSection(title: "Cast"),
+                          ...state.details?.cast.map((cast) {
+                            return CastMemberCard(cast: cast);
+                          }) ??
+                              [],
+                          TitleSection(title: "Genres"),
+
+                          GridView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 2.7,
+                              mainAxisSpacing: 16.h,
+                              crossAxisSpacing: 16.w,
+                            ),
+                            itemCount: state.details?.genres.length ?? 0,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  color: Theme
+                                      .of(
+                                    context,
+                                  )
+                                      .colorScheme
+                                      .surfaceContainer,
+                                ),
+                                child: Text(
+                                  state.details?.genres[index] ?? "",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .bodyMedium,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

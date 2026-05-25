@@ -9,6 +9,7 @@ import 'package:movies/presentation/common_component/appTextField.dart';
 import 'package:movies/presentation/feature/movie_detail/movie_entity_extesion.dart';
 import 'package:movies/presentation/feature/search/search_cubit.dart';
 
+import '../../../config/path_argument.dart';
 import '../../../core/resource/assets_manager.dart';
 import '../../../domain/usecase/search_movies_use_case.dart';
 import '../home/movieCard.dart';
@@ -105,7 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           FocusScope.of(context).unfocus();
                           Navigator.of(context).pushNamed(
                             RoutesManger.movieDetailScreen,
-                            arguments: {"movieEntity": state.movies[index]},
+                            arguments: {PathArguments.movieDetail: state.movies[index]},
                           );
                         },
                       );

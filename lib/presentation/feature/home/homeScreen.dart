@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies/core/resource/routes_manager.dart';
 
+import '../../../config/path_argument.dart';
 import '../../../core/resource/colors_manager.dart';
 import '../../../dependency_injection/di.dart';
 import '../../../domain/usecase/get_latest_movies_use_case.dart';
@@ -39,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             builder: (context, state) {
               if (state.isLoading) {
-                // return AvailableMoviesCarouselShimmer();
                 return SizedBox(
                   height: 600.h,
                   child: Center(
@@ -51,7 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
               } else {
                 return AvailableMoviesCarousel(
                   movies: state.movies,
-                  onMovieClicked: (movie) => {},
+                  onMovieClicked: (movie) => {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesManger.movieDetailScreen,
+                      arguments: {PathArguments.movieDetail: movie},
+                    ),
+                  },
                 );
               }
             },
