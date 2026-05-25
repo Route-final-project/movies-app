@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movies/core/resource/colors_manager.dart';
+import 'package:movies/core/resource/routes_manager.dart';
 import 'package:movies/dependency_injection/di.dart';
 import 'package:movies/presentation/common_component/appTextField.dart';
+import 'package:movies/presentation/feature/movie_detail/movie_entity_extesion.dart';
 import 'package:movies/presentation/feature/search/search_cubit.dart';
 
 import '../../../core/resource/assets_manager.dart';
@@ -28,11 +30,13 @@ class _SearchScreenState extends State<SearchScreen> {
       (timeStamp) => textFieldFocus.requestFocus(),
     );
   }
+
   @override
   void dispose() {
     super.dispose();
     textFieldFocus.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -96,16 +100,23 @@ class _SearchScreenState extends State<SearchScreen> {
                         return const Center(child: CircularProgressIndicator());
                       }
                       return MovieCard(
-                        movie: state.movies[index],
-                        onTap: (int id) {},
+                        movie: state.movies[index].toUiState(),
+                        onTap: (int id) {
+                          FocusScope.of(context).unfocus();
+                          Navigator.of(context).pushNamed(
+                            RoutesManger.movieDetailScreen,
+                            arguments: {"movieEntity": state.movies[index]},
+                          );
+                        },
                       );
                     },
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 0.7,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.7,
+                        ),
                     itemCount: BlocProvider.of<SearchCubit>(context).isLoading
                         ? state.movies.length + 2
                         : state.movies.length,
