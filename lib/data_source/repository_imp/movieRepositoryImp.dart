@@ -8,6 +8,7 @@ import 'package:movies/domain/app_error.dart';
 import '../../domain/entity/movie_entity.dart';
 import '../../domain/repository_interface/movieRepository.dart';
 import '../remote_data_source/remoteDataSource.dart';
+import '../remote_data_source/response_object/movieDetailsResponse.dart';
 
 @LazySingleton(as: MovieRepository)
 class MovieRepositoryImp implements MovieRepository {
@@ -40,4 +41,28 @@ class MovieRepositoryImp implements MovieRepository {
       return Left(mapExceptionToError(e));
     }
   }
+
+  @override
+  Future<Either<AppError, MovieEntity>> getMovieDetailsById(int movieId) async {
+    try{
+      MovieDetail movieDetailResponse = await remoteDataSource.getMovieDetailsById(movieId);
+      print("==> movieDetailResponse: $movieDetailResponse");
+      return Right(movieDetailResponse.toMovieEntity());
+    } on RemoteAppException catch (e) {
+      return Left(mapExceptionToError(e));
+    }
+
+  }
+
+  @override
+  Future<Either<AppError, List<MovieEntity>>> getSimilarMovies(int movieId) async {
+    try{
+      List<Movie> movies = await remoteDataSource.getSimilarMovies(movieId);
+      List<MovieEntity> moviesEntity = movies.map((m)=> m.toMovieEntity()).toList();
+      return right(moviesEntity);
+    } on RemoteAppException catch (e) {
+      return Left(mapExceptionToError(e));
+    }
+  }
+
 }
