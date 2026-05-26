@@ -113,4 +113,34 @@ class RemoteDataSource {
       throw RemoteException('Network error');
     }
   }
+
+  Future<List<Movie>> browseMoviesByGenre(
+      String genre,
+      int page, {
+        int limit = 20,
+      }) async {
+    Response response;
+    try {
+      response = await dio.get(
+        AppConstants.moviesListEndpoint,
+        queryParameters: {
+          "genre": genre.toLowerCase(),
+          "page": page,
+          "limit": limit,
+        },
+      );
+      MoviesListResponse moviesListResponse = MoviesListResponse.fromJson(
+        response.data,
+      );
+      return moviesListResponse.data?.movies ?? [];
+    } on SocketException catch (_) {
+      throw NoInternetException('No Internet Connection');
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    } on Exception catch (_) {
+      throw RemoteException('Network error');
+    }
+  }
+}
+
 }

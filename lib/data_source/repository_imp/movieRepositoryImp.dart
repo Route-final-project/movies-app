@@ -30,7 +30,10 @@ class MovieRepositoryImp implements MovieRepository {
   }
 
   @override
-  Future<Either<AppError, List<MovieEntity>>> searchMovies(String query, int page) async {
+  Future<Either<AppError, List<MovieEntity>>> searchMovies(
+    String query,
+    int page,
+  ) async {
     try {
       List<Movie> moviesList = await remoteDataSource.findMovies(query, page);
       List<MovieEntity> movies = moviesList
@@ -65,4 +68,25 @@ class MovieRepositoryImp implements MovieRepository {
     }
   }
 
+
+  @override
+  Future<Either<AppError, List<MovieEntity>>> browseMoviesByGenre(
+    String genre,
+    int page, {
+    int limit = 20,
+  }) async {
+    try {
+      List<Movie> moviesList = await remoteDataSource.browseMoviesByGenre(
+        genre,
+        page,
+        limit: limit,
+      );
+      List<MovieEntity> movies = moviesList
+          .map((m) => m.toMovieEntity())
+          .toList();
+      return Right(movies);
+    } on RemoteAppException catch (e) {
+      return Left(mapExceptionToError(e));
+    }
+  }
 }
