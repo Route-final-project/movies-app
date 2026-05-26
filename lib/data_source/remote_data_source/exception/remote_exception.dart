@@ -19,3 +19,7 @@ class NotFoundException extends RemoteAppException {
 class RemoteException extends RemoteAppException {
   RemoteException(super.message);
 }
+
+class ProfileAlreadyExistsException extends RemoteAppException {
+  ProfileAlreadyExistsException() : super('User profile already exists.');
+}

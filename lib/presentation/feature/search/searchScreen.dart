@@ -8,6 +8,7 @@ import 'package:movies/presentation/common_component/appTextField.dart';
 import 'package:movies/presentation/feature/search/search_cubit.dart';
 
 import '../../../core/resource/assets_manager.dart';
+import '../../../domain/usecase/add_movie_to_history_use_case.dart';
 import '../../../domain/usecase/search_movies_use_case.dart';
 import '../home/movieCard.dart';
 
@@ -38,8 +39,10 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          SearchCubit(searchMoviesUseCase: getIt<SearchMoviesUseCase>()),
+      create: (context) => SearchCubit(
+        searchMoviesUseCase: getIt<SearchMoviesUseCase>(),
+        addMovieToHistoryUseCase: getIt<AddMovieToHistoryUseCase>(),
+      ),
       child: Column(
         children: [
           BlocBuilder<SearchCubit, SearchState>(
@@ -99,7 +102,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       }
                       return MovieCard(
                         movie: state.movies[index],
-                        onTap: (int id) {},
+                        onTap: (int id) => context
+                            .read<SearchCubit>()
+                            .recordMovieInHistory(state.movies[index]),
                       );
                     },
                     gridDelegate:
