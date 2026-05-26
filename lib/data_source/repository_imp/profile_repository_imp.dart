@@ -39,10 +39,10 @@ class ProfileRepositoryImp implements ProfileRepository {
   }
 
   @override
-  Future<Either<AppError, ProfileEntity>> addMovieToWishlist(
+  Future<Either<AppError, void>> addMovieToWishlist(
     MovieEntity movie,
-  ) {
-    return _run(() => _dataSource.addMovieToWishlist(movie));
+  ) async {
+    return  await _run(() => _dataSource.addMovieToWishlist(movie));
   }
 
   @override
@@ -50,8 +50,8 @@ class ProfileRepositoryImp implements ProfileRepository {
     return _run(() => _dataSource.addMovieToHistory(movie));
   }
 
-  Future<Either<AppError, ProfileEntity>> _run(
-    Future<ProfileEntity> Function() action,
+  Future<Either<AppError, T>> _run<T>(
+    Future<T> Function() action,
   ) async {
     try {
       return Right(await action());
@@ -71,4 +71,16 @@ class ProfileRepositoryImp implements ProfileRepository {
       return Left(LocalError(error.toString()));
     }
   }
+
+  @override
+  Future<Either<AppError, void>> removeMovieFromWishlist(int movieId) async {
+    return await _run(() => _dataSource.removeMovieFromWishlist(movieId));
+  }
+
+  @override
+  Future<Either<AppError, List<int>>> getWishlist() async {
+    return await _run(() => _dataSource.getWishlist());
+  }
+
+
 }

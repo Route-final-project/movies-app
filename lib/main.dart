@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies/core/resource/routes_manager.dart';
 import 'package:movies/dependency_injection/di.dart';
 import 'package:movies/firebase_options.dart';
 import 'package:movies/presentation/feature/auth/login_screen.dart';
@@ -44,21 +45,20 @@ class MoviesApp extends StatelessWidget {
           title: 'Movies App',
           debugShowCheckedModeBanner: false,
           theme: ThemeManager.appTheme,
-          home: _getStartScreen(),
+          initialRoute: _getStartScreenRoute(),
+          routes: RoutesManger.routes,
         );
       },
     );
   }
 
-  Widget _getStartScreen() {
+  String _getStartScreenRoute() {
     if (!hasSeenOnboarding) {
-      return const OnboardingScreen();
+      return RoutesManger.onboarding;
     }
-
     if (FirebaseAuth.instance.currentUser != null) {
-      return const MainAppScreen();
+      return RoutesManger.mainAppScreenRoute;
     }
-
-    return const LoginScreen();
+    return RoutesManger.loginScreen;
   }
 }

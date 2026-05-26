@@ -39,6 +39,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         child: AppBottomNavigationBar(
           currentIndex: _currentIndex,
           onDestinationSelected: (index) {
+            FocusScope.of(context).unfocus();
             setState(() {
               if (index == 0 && _currentIndex != 0) {
                 _homeRefreshToken++;

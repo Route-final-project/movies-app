@@ -13,7 +13,11 @@ abstract class ProfileRepository {
     required int avatarId,
   });
 
-  Future<Either<AppError, ProfileEntity>> addMovieToWishlist(MovieEntity movie);
+  Future<Either<AppError, void>> addMovieToWishlist(MovieEntity movie);
 
   Future<Either<AppError, ProfileEntity>> addMovieToHistory(MovieEntity movie);
+
+  Future<Either<AppError, void>> removeMovieFromWishlist(int movieId);
+
+  Future<Either<AppError, List<int>>> getWishlist();
 }

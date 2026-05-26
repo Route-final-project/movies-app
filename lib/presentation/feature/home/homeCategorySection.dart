@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../config/path_argument.dart';
 import '../../../core/resource/colors_manager.dart';
+import '../../../core/resource/routes_manager.dart';
 import '../browse/browseScreen.dart';
+import '../movie_detail/movie_entity_extesion.dart';
 import 'home_category_cubit/home_category_cubit.dart';
 import 'movieCard.dart';
 
@@ -110,32 +113,15 @@ class HomeCategorySection extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final movie = state.movies[index];
                     return MovieCard(
-                      movie: movie,
-                      width: 102.w,
-                      height: 150.h,
-                      borderRadius: 12.r,
-                      fit: BoxFit.contain,
-                      badgeLeft: 8.w,
-                      badgeTop: 8.h,
-                      badgePadding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                        vertical: 2.h,
-                      ),
-                      ratingIconSize: 14.r,
-                      ratingTextStyle: Theme.of(context).textTheme.bodySmall
-                          ?.copyWith(
-                            color: ColorsManager.white,
-                            fontSize: 12.sp,
-                          ),
-                      onTap: (_) {
-                        context.read<HomeCategoryCubit>().recordMovieInHistory(
+                      movie: movie.toUiState(),
+                      onTap: (_) async {
+                        await context.read<HomeCategoryCubit>().recordMovieInHistory(
                           movie,
                         );
-                        // TODO: Navigate to movie details when a details route exists.
+                        Navigator.pushNamed(context, RoutesManger.movieDetailScreen, arguments:{
+                          PathArguments.movieId: movie.id
+                        });
                       },
-                      onWishlistTap: () => context
-                          .read<HomeCategoryCubit>()
-                          .addMovieToWishlist(movie),
                     );
                   },
                 ),

@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies/presentation/feature/movie_detail/movie_entity_extesion.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/resource/assets_manager.dart';
 import '../../../domain/entity/movie_entity.dart';
+import '../movie_detail/movie_detail_cubit.dart';
 import '../../common_component/moviePosterImage.dart';
 import 'movieCard.dart';
 
@@ -12,13 +15,11 @@ class AvailableMoviesCarousel extends StatefulWidget {
   const AvailableMoviesCarousel({
     required this.movies,
     required this.onMovieClicked,
-    required this.onWishlistClicked,
     super.key,
   });
 
-  final List<MovieEntity> movies;
-  final Function(MovieEntity) onMovieClicked;
-  final Function(MovieEntity) onWishlistClicked;
+  final List<MovieUiState> movies;
+  final Function(MovieUiState) onMovieClicked;
 
   @override
   State<AvailableMoviesCarousel> createState() =>
@@ -35,10 +36,14 @@ class _AvailableMoviesCarouselState extends State<AvailableMoviesCarousel> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        SizedBox(
+        Container(
           height: 600.h,
-          width: double.infinity,
-          child: MoviePosterImage(imageUrl: imageUrl, fit: BoxFit.cover),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(imageUrl),
+              fit: BoxFit.fill,
+            ),
+          ),
         ),
         Container(
           height: 600.h,
@@ -64,7 +69,6 @@ class _AvailableMoviesCarouselState extends State<AvailableMoviesCarousel> {
                         onTap: (_) {
                           widget.onMovieClicked(e);
                         },
-                        onWishlistTap: () => widget.onWishlistClicked(e),
                       ),
                     )
                     .toList(),

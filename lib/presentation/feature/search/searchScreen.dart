@@ -3,13 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movies/core/resource/colors_manager.dart';
+import 'package:movies/core/resource/routes_manager.dart';
 import 'package:movies/dependency_injection/di.dart';
 import 'package:movies/presentation/common_component/appTextField.dart';
+import 'package:movies/presentation/feature/movie_detail/movie_entity_extesion.dart';
 import 'package:movies/presentation/feature/search/search_cubit.dart';
 
+import '../../../config/path_argument.dart';
 import '../../../core/resource/assets_manager.dart';
 import '../../../domain/usecase/add_movie_to_history_use_case.dart';
-import '../../../domain/usecase/add_movie_to_wishlist_use_case.dart';
 import '../../../domain/usecase/search_movies_use_case.dart';
 import '../home/movieCard.dart';
 
@@ -43,7 +45,6 @@ class _SearchScreenState extends State<SearchScreen> {
       create: (context) => SearchCubit(
         searchMoviesUseCase: getIt<SearchMoviesUseCase>(),
         addMovieToHistoryUseCase: getIt<AddMovieToHistoryUseCase>(),
-        addMovieToWishlistUseCase: getIt<AddMovieToWishlistUseCase>(),
       ),
       child: Column(
         children: [
@@ -103,13 +104,19 @@ class _SearchScreenState extends State<SearchScreen> {
                         return const Center(child: CircularProgressIndicator());
                       }
                       return MovieCard(
-                        movie: state.movies[index],
-                        onTap: (int id) => context
-                            .read<SearchCubit>()
-                            .recordMovieInHistory(state.movies[index]),
-                        onWishlistTap: () => context
-                            .read<SearchCubit>()
-                            .addMovieToWishlist(state.movies[index]),
+                        movie: state.movies[index].toUiState(),
+                        onTap: (int id) async {
+                          FocusScope.of(context).unfocus();
+                          await context.read<SearchCubit>().recordMovieInHistory(
+                            state.movies[index],
+                          );
+                          Navigator.of(context).pushNamed(
+                            RoutesManger.movieDetailScreen,
+                            arguments: {
+                              PathArguments.movieId: state.movies[index].id,
+                            },
+                          );
+                        },
                       );
                     },
                     gridDelegate:

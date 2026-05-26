@@ -34,7 +34,7 @@ class SecondaryAppButton extends StatelessWidget {
               child: prefixIcon,
             ),
           ],
-          Text(text),
+          Text(text, style: Theme.of(context).textTheme.titleSmall),
           if (suffixIcon != null) ...[
             Padding(
               padding: EdgeInsetsDirectional.only(start: 11.w),
@@ -46,3 +46,4 @@ class SecondaryAppButton extends StatelessWidget {
     );
   }
 }
+

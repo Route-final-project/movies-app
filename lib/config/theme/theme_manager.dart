@@ -50,6 +50,8 @@ abstract class ThemeManager {
       brightness: Brightness.dark,
       primary: ColorsManager.gold,
       secondary: ColorsManager.gold,
+      surfaceContainer: ColorsManager.grey,
+      secondaryContainer: ColorsManager.grey,
     ),
 
     inputDecorationTheme: InputDecorationTheme(
@@ -103,21 +105,6 @@ abstract class ThemeManager {
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: ColorsManager.grey,
-
-      // labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
-      //       (states) {
-      //     if (states.contains(WidgetState.selected)) {
-      //       return const TextStyle(
-      //         color: Colors.white,
-      //         fontWeight: FontWeight.bold,
-      //       );
-      //     }
-      //
-      //     return const TextStyle(
-      //       color: Colors.grey,
-      //     );
-      //   },
-      // ),
       iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((states) {
         if (states.contains(WidgetState.selected)) {
           return const IconThemeData(color: ColorsManager.gold, size: 28);
@@ -126,21 +113,19 @@ abstract class ThemeManager {
         return const IconThemeData(color: ColorsManager.white, size: 24);
       }),
     ),
+    chipTheme: ChipThemeData(
+      labelStyle: GoogleFonts.roboto(
+        fontSize: 22.sp,
+        fontWeight: FontWeight.w700,
+        color: ColorsManager.white,
+      ),
+      iconTheme: IconThemeData(color: ColorsManager.gold),
+      backgroundColor: ColorsManager.grey,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.r),
+        side: BorderSide(color: Colors.transparent),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+    ),
   );
-
-  //  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-  //    selectedIconTheme: IconThemeData(
-  //      color: ColorsManager.gold,
-  //      size: 26.sp,
-  //    ),
-  //    unselectedIconTheme: IconThemeData(
-  //      color: ColorsManager.white,
-  //      size: 26.sp,
-  //    ),
-  //    backgroundColor: ColorsManager.black,
-  //    selectedItemColor: ColorsManager.gold,
-  //    unselectedItemColor: ColorsManager.white,
-  //    showSelectedLabels: false,
-  //    showUnselectedLabels: false,
-  //  )
 }
