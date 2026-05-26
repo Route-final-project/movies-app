@@ -8,7 +8,7 @@ import 'package:movies/presentation/feature/movie_detail/movie_detail_cubit.dart
 class MovieCard extends StatelessWidget {
   const MovieCard({
     required this.movie,
-    this.onTap,
+    required this.onTap,
     this.compact = false,
     super.key,
   });
@@ -50,7 +50,7 @@ class MovieCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      movie.rating.toStringAsFixed(1),
+                      movie.rating,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     SizedBox(width: 2.w),

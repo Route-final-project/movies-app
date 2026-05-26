@@ -8,6 +8,7 @@ import '../../../core/resource/colors_manager.dart';
 import '../../../dependency_injection/di.dart';
 import '../../../domain/usecase/add_movie_to_history_use_case.dart';
 import '../../../domain/usecase/get_latest_movies_use_case.dart';
+import '../movie_detail/movie_entity_extesion.dart';
 import 'availableMoviesCarousel.dart';
 import 'available_movies_cubit/available_movies_cubit.dart';
 
@@ -53,16 +54,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 return const Center(child: Text("No available movies"));
               } else {
                 return AvailableMoviesCarousel(
-                  movies: state.movies,
-                  onMovieClicked: (movie) => context
-                      .read<AvailableMoviesCubit>()
-                      .recordMovieInHistory(movie),
-                  onMovieClicked: (movieUiState) => {
+                  movies: state.movies.map((e) => e.toUiState()).toList(),
+                  onMovieClicked: (movieUiState) async {
+                    await context.read<AvailableMoviesCubit>().recordMovieInHistory(
+                      movieUiState,
+                    );
                     Navigator.pushNamed(
                       context,
                       RoutesManger.movieDetailScreen,
                       arguments: {PathArguments.movieId: movieUiState.id},
-                    ),
+                    );
                   },
                 );
               }

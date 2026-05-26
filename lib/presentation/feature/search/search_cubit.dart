@@ -76,9 +76,13 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<void> recordMovieInHistory(MovieEntity movie) async {
     final result = await addMovieToHistoryUseCase(movie);
-    result.fold((_) {
-      // History sync is best effort; search browsing should stay uninterrupted.
-    }, (_) => emit(state.copyWith(errorMessage: '')));
+    result.fold(
+      (error) {
+        print("==>erererer ${error.message}");
+        emit(state.copyWith(errorMessage: error.message));
+      },
+      (_) => emit(state.copyWith(errorMessage: '')),
+    );
   }
 
   @override

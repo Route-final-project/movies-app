@@ -105,16 +105,19 @@ class _SearchScreenState extends State<SearchScreen> {
                       }
                       return MovieCard(
                         movie: state.movies[index].toUiState(),
-                        onTap: (int id) {
+                        onTap: (int id) async {
                           FocusScope.of(context).unfocus();
-                          context
-                              .read<SearchCubit>()
-                              .recordMovieInHistory(state.movies[index]);
+                          await context.read<SearchCubit>().recordMovieInHistory(
+                            state.movies[index],
+                          );
                           Navigator.of(context).pushNamed(
                             RoutesManger.movieDetailScreen,
-                            arguments: {PathArguments.movieId: state.movies[index].id},
+                            arguments: {
+                              PathArguments.movieId: state.movies[index].id,
+                            },
                           );
                         },
+                      );
                     },
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(

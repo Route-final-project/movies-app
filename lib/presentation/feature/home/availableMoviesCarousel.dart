@@ -7,6 +7,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../core/resource/assets_manager.dart';
 import '../../../domain/entity/movie_entity.dart';
+import '../movie_detail/movie_detail_cubit.dart';
 import 'movieCard.dart';
 
 class AvailableMoviesCarousel extends StatefulWidget {
@@ -16,8 +17,8 @@ class AvailableMoviesCarousel extends StatefulWidget {
     super.key,
   });
 
-  final List<MovieEntity> movies;
-  final Function(MovieEntity) onMovieClicked;
+  final List<MovieUiState> movies;
+  final Function(MovieUiState) onMovieClicked;
 
   @override
   State<AvailableMoviesCarousel> createState() =>
@@ -63,7 +64,7 @@ class _AvailableMoviesCarouselState extends State<AvailableMoviesCarousel> {
                 items: widget.movies
                     .map(
                       (e) => MovieCard(
-                        movie: e.toUiState(),
+                        movie: e,
                         onTap: (_) {
                           widget.onMovieClicked(e);
                         },

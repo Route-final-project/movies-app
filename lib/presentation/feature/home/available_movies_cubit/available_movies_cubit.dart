@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:movies/domain/app_error.dart';
+import 'package:movies/presentation/feature/movie_detail/movie_detail_cubit.dart';
 
 import '../../../../domain/entity/movie_entity.dart';
 import '../../../../domain/usecase/add_movie_to_history_use_case.dart';
@@ -51,10 +52,17 @@ class AvailableMoviesCubit extends Cubit<AvailableMoviesState> {
     );
   }
 
-  Future<void> recordMovieInHistory(MovieEntity movie) async {
-    final result = await addMovieToHistoryUseCase(movie);
-    result.fold((_) {
-      // History sync is best effort; movie browsing should stay uninterrupted.
-    }, (_) => emit(state.copyWith(errorMessage: '')));
+  Future<void> recordMovieInHistory(MovieUiState movie) async {
+    final result = await addMovieToHistoryUseCase(
+      MovieEntity(
+        id: movie.id,
+        rating: double.parse(movie.rating),
+        imageUrl: movie.imageUrl,
+      ),
+    );
+    result.fold(
+      (err) => emit(state.copyWith(errorMessage: err.message)),
+      (_) {},
+    );
   }
 }

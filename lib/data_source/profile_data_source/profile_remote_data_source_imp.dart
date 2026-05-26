@@ -132,6 +132,7 @@ class ProfileRemoteDataSourceImp implements ProfileRemoteDataSource {
         collection,
       ).doc('${movie.id}').set(ProfileMapper.movieToJson(movie));
     } on FirebaseException catch (error) {
+      print("==>erererer ${error.message}");
       throw FirebaseExceptionMapper.firestore(error);
     }
     return getProfile();
