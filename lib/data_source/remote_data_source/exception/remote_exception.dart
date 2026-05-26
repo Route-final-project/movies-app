@@ -1,11 +1,9 @@
-
 import '../../app_exception.dart';
 
 sealed class RemoteAppException extends AppException {
-  @override
-  final String message;
-  RemoteAppException(this.message): super(message);
+  RemoteAppException(super.message);
 }
+
 class NoInternetException extends RemoteAppException {
   NoInternetException(super.message);
 }

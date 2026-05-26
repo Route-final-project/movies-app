@@ -60,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                   hintText: "Search",
-                  validator: (_) {},
+                  validator: (_) => null,
                   onChanged: (value) {},
                   onTap: () {},
                 ),

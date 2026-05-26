@@ -42,7 +42,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         ),
       ),
       body: SafeArea(
-          child: IndexedStack(index: _currentIndex, children: _screens),
+        child: IndexedStack(index: _currentIndex, children: _screens),
       ),
     );
   }
@@ -50,7 +50,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
 @immutable
 class AppBottomNavigationBar extends StatelessWidget {
-  AppBottomNavigationBar({
+  const AppBottomNavigationBar({
     required this.currentIndex,
     required this.onDestinationSelected,
     super.key,
