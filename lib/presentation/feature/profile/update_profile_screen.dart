@@ -23,7 +23,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  bool _initialized = false;
+  String? _populatedProfileSignature;
   int _avatarId = 1;
 
   @override
@@ -34,12 +34,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   void _populateFields(ProfileState state) {
-    if (_initialized || state.profile == null) return;
+    if (state.profile == null) return;
     final profile = state.profile!;
+    final signature =
+        '${profile.uid}|${profile.name}|${profile.phone}|${profile.avatarId}';
+    if (_populatedProfileSignature == signature) return;
+
     _nameController.text = profile.name;
     _phoneController.text = profile.phone;
     _avatarId = profile.avatarId;
-    _initialized = true;
+    _populatedProfileSignature = signature;
   }
 
   void _openAvatarPicker() {
@@ -63,9 +67,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: ColorsManager.grey,
-        title: const Text('Delete Account'),
+        title: const Text(
+          'Delete Account',
+          style: TextStyle(color: ColorsManager.white),
+        ),
         content: const Text(
           'Are you sure you want to permanently delete your account?',
+          style: TextStyle(color: ColorsManager.white),
         ),
         actions: [
           TextButton(

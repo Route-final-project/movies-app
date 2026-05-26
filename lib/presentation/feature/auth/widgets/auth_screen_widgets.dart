@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../core/resource/assets_manager.dart';
 import '../../../../core/resource/colors_manager.dart';
 import '../../../common_component/appTextField.dart';
-import '../../../common_component/primaryAppButton.dart';
 import '../../../common_component/language_toggle.dart';
 
 class AuthScaffold extends StatelessWidget {
@@ -132,103 +129,6 @@ class AuthField extends StatelessWidget {
           onSuffixClicked: onSuffixClicked,
         ),
       ),
-    );
-  }
-}
-
-class AuthPrimaryButton extends StatelessWidget {
-  const AuthPrimaryButton({
-    required this.text,
-    required this.onPressed,
-    this.isLoading = false,
-    super.key,
-  });
-
-  final String text;
-  final VoidCallback onPressed;
-  final bool isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 48.h,
-      child: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: ColorsManager.gold),
-            )
-          : Theme(
-              data: Theme.of(context).copyWith(
-                filledButtonTheme: FilledButtonThemeData(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: ColorsManager.gold,
-                    foregroundColor: ColorsManager.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.r),
-                    ),
-                    textStyle: GoogleFonts.roboto(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              child: PrimaryAppButton(text: text, onPressed: onPressed),
-            ),
-    );
-  }
-}
-
-class AuthGoogleButton extends StatelessWidget {
-  const AuthGoogleButton({
-    required this.onPressed,
-    this.isLoading = false,
-    super.key,
-  });
-
-  final VoidCallback onPressed;
-  final bool isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 48.h,
-      child: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: ColorsManager.gold),
-            )
-          : Theme(
-              data: Theme.of(context).copyWith(
-                filledButtonTheme: FilledButtonThemeData(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: ColorsManager.gold,
-                    foregroundColor: ColorsManager.black,
-                    iconColor: ColorsManager.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.r),
-                    ),
-                    textStyle: GoogleFonts.roboto(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              child: PrimaryAppButton(
-                text: 'Login With Google',
-                onPressed: onPressed,
-                prefixIcon: SvgPicture.asset(
-                  ImageAssets.googleIcon,
-                  width: 24.r,
-                  height: 24.r,
-                  colorFilter: const ColorFilter.mode(
-                    ColorsManager.black,
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
-            ),
     );
   }
 }

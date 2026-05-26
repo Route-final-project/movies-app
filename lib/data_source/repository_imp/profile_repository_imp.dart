@@ -9,6 +9,8 @@ import '../../domain/entity/movie_entity.dart';
 import '../../domain/entity/profile_entity.dart';
 import '../../domain/repository_interface/profile_repository.dart';
 import '../profile_data_source/profile_remote_data_source.dart';
+import '../remote_data_source/exception/map_exception_to_error.dart';
+import '../remote_data_source/exception/remote_exception.dart';
 
 @LazySingleton(as: ProfileRepository)
 class ProfileRepositoryImp implements ProfileRepository {
@@ -53,6 +55,8 @@ class ProfileRepositoryImp implements ProfileRepository {
   ) async {
     try {
       return Right(await action());
+    } on RemoteAppException catch (error) {
+      return Left(mapExceptionToError(error));
     } on TimeoutException {
       return Left(
         NetworkError('Request timed out. Please check your connection.'),

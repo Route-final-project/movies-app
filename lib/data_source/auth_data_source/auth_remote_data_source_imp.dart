@@ -7,6 +7,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/entity/auth_entity.dart';
+import '../mapper/auth_mapper.dart';
+import '../mapper/firebase_exception_mapper.dart';
+import '../profile_data_source/profile_local_cache.dart';
+import '../remote_data_source/exception/remote_exception.dart';
 import 'auth_remote_data_source.dart';
 
 @LazySingleton(as: AuthRemoteDataSource)
@@ -24,7 +28,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
       email: email,
       password: password,
     );
-    return _mapUser(cred.user!);
+    return AuthMapper.toEntity(cred.user!);
   }
 
   @override
@@ -40,13 +44,21 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
       password: password,
     );
     await cred.user?.updateDisplayName(name);
-    await _tryCreateOrUpdateUserProfile(
+    await ProfileLocalCache.save(
       uid: cred.user!.uid,
       name: name,
+      email: email,
       phone: phone,
       avatarId: avatarId,
     );
-    return _mapUser(cred.user!);
+    await _createUserProfile(
+      uid: cred.user!.uid,
+      name: name,
+      email: email,
+      phone: phone,
+      avatarId: avatarId,
+    );
+    return AuthMapper.toEntity(cred.user!);
   }
 
   @override
@@ -56,7 +68,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
       final provider = GoogleAuthProvider();
       final cred = await _auth.signInWithPopup(provider);
       await _ensureGoogleUserProfile(cred.user!);
-      return _mapUser(cred.user!);
+      return AuthMapper.toEntity(cred.user!);
     } else {
       // On mobile: use google_sign_in package
       final googleUser = await _googleSignIn.signIn();
@@ -73,7 +85,7 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
       );
       final cred = await _auth.signInWithCredential(credential);
       await _ensureGoogleUserProfile(cred.user!);
-      return _mapUser(cred.user!);
+      return AuthMapper.toEntity(cred.user!);
     }
   }
 
@@ -83,14 +95,19 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
 
   @override
   Future<void> signOut() async {
-    if (!kIsWeb) {
-      try {
+    try {
+      await _auth.signOut();
+      if (!kIsWeb) {
+        // Web Google auth is owned by FirebaseAuth.signInWithPopup.
         await _googleSignIn.signOut();
-      } catch (_) {
-        // FirebaseAuth.signOut is the app's source of truth.
       }
+    } on FirebaseAuthException {
+      rethrow;
+    } on FirebaseException catch (error) {
+      throw FirebaseExceptionMapper.firestore(error);
+    } catch (error) {
+      throw RemoteException('Unable to sign out: $error');
     }
-    await _auth.signOut();
   }
 
   @override
@@ -106,74 +123,62 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource {
     if (!kIsWeb) {
       try {
         await _googleSignIn.signOut();
-      } catch (_) {
-        // FirebaseAuth deletion is already complete.
+      } on FirebaseException catch (error) {
+        throw FirebaseExceptionMapper.firestore(error);
+      } catch (error) {
+        throw RemoteException('Unable to clear Google sign-in session: $error');
       }
     }
   }
 
-  AuthEntity _mapUser(User user) => AuthEntity(
-    uid: user.uid,
-    email: user.email ?? '',
-    displayName: user.displayName,
-    photoURL: user.photoURL,
-  );
-
   Future<void> _ensureGoogleUserProfile(User user) async {
     try {
-      final doc = _firestore.collection('users').doc(user.uid);
-      final snapshot = await doc.get().timeout(_profileWriteTimeout);
-      if (snapshot.exists) return;
-
-      await _tryCreateOrUpdateUserProfile(
+      await _createUserProfile(
         uid: user.uid,
         name: user.displayName ?? user.email?.split('@').first ?? 'User',
+        email: user.email ?? '',
         phone: '',
         avatarId: 1,
       );
-    } on TimeoutException {
-      // Profile creation is best effort for Google sign-in.
     } on FirebaseException catch (error) {
-      if (error.code != 'unavailable') rethrow;
+      throw FirebaseExceptionMapper.firestore(error);
+    } on ProfileAlreadyExistsException {
+      // The Google account already has a profile document.
+      return;
     }
   }
 
-  Future<void> _tryCreateOrUpdateUserProfile({
+  Future<void> _createUserProfile({
     required String uid,
     required String name,
+    required String email,
     required String phone,
     required int avatarId,
   }) async {
     try {
-      await _createOrUpdateUserProfile(
-        uid: uid,
-        name: name,
-        phone: phone,
-        avatarId: avatarId,
-      );
-    } on TimeoutException {
-      // Auth already succeeded; Firestore can sync the profile later.
-    } on FirebaseException catch (error) {
-      if (error.code != 'unavailable') rethrow;
-    }
-  }
+      final document = _firestore.collection('users').doc(uid);
+      try {
+        final snapshot = await document.get().timeout(_profileWriteTimeout);
+        if (snapshot.exists) throw ProfileAlreadyExistsException();
+      } on TimeoutException {
+        // Auth uid is unique. If the existence check is slow on web, continue
+        // creating the profile instead of leaving registration half-finished.
+      }
 
-  Future<void> _createOrUpdateUserProfile({
-    required String uid,
-    required String name,
-    required String phone,
-    required int avatarId,
-  }) {
-    return _firestore
-        .collection('users')
-        .doc(uid)
-        .set({
-          'name': name,
-          'phone': phone,
-          'avatarId': avatarId,
-          'wishlistMovies': <Map<String, dynamic>>[],
-          'historyMovies': <Map<String, dynamic>>[],
-        }, SetOptions(merge: true))
-        .timeout(_profileWriteTimeout);
+      await document
+          .set({
+            'uid': uid,
+            'name': name,
+            'email': email,
+            'phone': phone,
+            'avatarId': avatarId,
+          })
+          .timeout(_profileWriteTimeout);
+    } on TimeoutException {
+      // Auth creation already succeeded. Firestore can still complete the
+      // pending set, so do not leave the user stuck on registration.
+    } on FirebaseException catch (error) {
+      throw FirebaseExceptionMapper.firestore(error);
+    }
   }
 }

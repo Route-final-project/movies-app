@@ -77,7 +77,10 @@ class ProfileCubit extends Cubit<ProfileState> {
           emit(state.copyWith(isSaving: false, errorMessage: _message(error))),
       (profile) => emit(
         state.copyWith(
-          profile: profile,
+          profile: profile.copyWith(
+            wishlistMovies: state.profile?.wishlistMovies,
+            historyMovies: state.profile?.historyMovies,
+          ),
           isSaving: false,
           didSave: true,
           errorMessage: '',

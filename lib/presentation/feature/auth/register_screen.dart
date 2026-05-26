@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../core/resource/assets_manager.dart';
 import '../../../core/resource/colors_manager.dart';
 import '../../../dependency_injection/di.dart';
+import '../../common_component/primaryAppButton.dart';
 import '../../mainAppScreen.dart';
 import 'cubit/auth_cubit.dart';
 import 'widgets/auth_screen_widgets.dart';
@@ -166,20 +167,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           : null,
                     ),
                     SizedBox(height: 35.h),
-                    AuthPrimaryButton(
-                      text: 'Create Account',
-                      isLoading: state.isLoading,
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<AuthCubit>().register(
-                            _nameController.text.trim(),
-                            _emailController.text.trim(),
-                            _passwordController.text.trim(),
-                            _phoneController.text.trim(),
-                            _selectedAvatar,
-                          );
-                        }
-                      },
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: PrimaryAppButton(
+                        text: 'Create Account',
+                        isLoading: state.isLoading,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<AuthCubit>().register(
+                              _nameController.text.trim(),
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                              _phoneController.text.trim(),
+                              _selectedAvatar,
+                            );
+                          }
+                        },
+                      ),
                     ),
                     SizedBox(height: 21.h),
                     AuthLinkText(

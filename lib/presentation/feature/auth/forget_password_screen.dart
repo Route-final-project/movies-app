@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/resource/assets_manager.dart';
 import '../../../core/resource/colors_manager.dart';
 import '../../../dependency_injection/di.dart';
+import '../../common_component/primaryAppButton.dart';
 import 'cubit/auth_cubit.dart';
 import 'widgets/auth_screen_widgets.dart';
 
@@ -82,16 +83,20 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       },
                     ),
                     SizedBox(height: 27.h),
-                    AuthPrimaryButton(
-                      text: 'Verify Email',
-                      isLoading: state.isLoading,
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<AuthCubit>().sendPasswordResetEmail(
-                            _emailController.text.trim(),
-                          );
-                        }
-                      },
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: PrimaryAppButton(
+                        text: 'Verify Email',
+                        isLoading: state.isLoading,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<AuthCubit>().sendPasswordResetEmail(
+                              _emailController.text.trim(),
+                            );
+                          }
+                        },
+                      ),
                     ),
                     SizedBox(height: 24.h),
                   ],

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/resource/assets_manager.dart';
 import '../../../core/resource/colors_manager.dart';
 import '../../../dependency_injection/di.dart';
+import '../../common_component/primaryAppButton.dart';
 import '../../mainAppScreen.dart';
 import 'cubit/auth_cubit.dart';
 import 'forget_password_screen.dart';
@@ -126,17 +128,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     SizedBox(height: 31.h),
-                    AuthPrimaryButton(
-                      text: 'Login',
-                      isLoading: state.isLoading,
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<AuthCubit>().signIn(
-                            _emailController.text.trim(),
-                            _passwordController.text.trim(),
-                          );
-                        }
-                      },
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: PrimaryAppButton(
+                        text: 'Login',
+                        isLoading: state.isLoading,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<AuthCubit>().signIn(
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                            );
+                          }
+                        },
+                      ),
                     ),
                     SizedBox(height: 23.h),
                     AuthLinkText(
@@ -178,10 +184,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     SizedBox(height: 31.h),
-                    AuthGoogleButton(
-                      isLoading: state.isLoading,
-                      onPressed: () =>
-                          context.read<AuthCubit>().signInWithGoogle(),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: PrimaryAppButton(
+                        text: 'Login With Google',
+                        isLoading: state.isLoading,
+                        style: Theme.of(context).filledButtonTheme.style
+                            ?.copyWith(
+                              textStyle: WidgetStatePropertyAll(
+                                GoogleFonts.roboto(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                        prefixIcon: SvgPicture.asset(
+                          ImageAssets.googleIcon,
+                          width: 24.r,
+                          height: 24.r,
+                          colorFilter: const ColorFilter.mode(
+                            ColorsManager.black,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        onPressed: () =>
+                            context.read<AuthCubit>().signInWithGoogle(),
+                      ),
                     ),
                     SizedBox(height: 32.h),
                     AuthLanguageToggle(
