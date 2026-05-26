@@ -10,7 +10,9 @@ abstract class ProfileRemoteDataSource {
     required int avatarId,
   });
 
-  Future<ProfileEntity> addMovieToWishlist(MovieEntity movie);
+  Future<void> addMovieToWishlist(MovieEntity movie);
+  Future <void> removeMovieFromWishlist(int movieId);
 
   Future<ProfileEntity> addMovieToHistory(MovieEntity movie);
+  Future<List<int>> getWishlist();
 }

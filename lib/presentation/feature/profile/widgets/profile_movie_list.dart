@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies/config/path_argument.dart';
+import 'package:movies/core/resource/routes_manager.dart';
 
 import '../../../../core/resource/assets_manager.dart';
 import '../../../../domain/entity/movie_entity.dart';
@@ -25,7 +27,11 @@ class ProfileMovieList extends StatelessWidget {
         childAspectRatio: .60,
       ),
       itemBuilder: (context, index) =>
-          MovieCard(movie: movies[index].toUiState(), compact: true, onTap: (id) => {}),
+          MovieCard(movie: movies[index].toUiState(), compact: true, onTap: (id) {
+            Navigator.pushNamed(context, RoutesManger.movieDetailScreen, arguments:{
+              PathArguments.movieId: id
+            });
+          }),
     );
   }
 }

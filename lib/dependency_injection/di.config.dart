@@ -37,11 +37,13 @@ import '../domain/usecase/browse_movies_use_case.dart' as _i724;
 import '../domain/usecase/delete_account_use_case.dart' as _i895;
 import '../domain/usecase/forget_password_use_case.dart' as _i598;
 import '../domain/usecase/get_latest_movies_use_case.dart' as _i729;
-import '../domain/usecase/get_profile_use_case.dart' as _i937;
 import '../domain/usecase/get_movie_details_by_id_user_case.dart' as _i814;
+import '../domain/usecase/get_profile_use_case.dart' as _i937;
 import '../domain/usecase/get_similar_movies_use_case.dart' as _i910;
+import '../domain/usecase/get_wishlist_use_case.dart' as _i87;
 import '../domain/usecase/google_sign_in_use_case.dart' as _i804;
 import '../domain/usecase/register_use_case.dart' as _i491;
+import '../domain/usecase/remove_movie_from_wishlist_use_case.dart' as _i25;
 import '../domain/usecase/search_movies_use_case.dart' as _i762;
 import '../domain/usecase/sign_in_use_case.dart' as _i50;
 import '../domain/usecase/sign_out_use_case.dart' as _i885;
@@ -52,8 +54,8 @@ import '../presentation/feature/home/available_movies_cubit/available_movies_cub
     as _i774;
 import '../presentation/feature/home/home_category_cubit/home_category_cubit.dart'
     as _i284;
-import '../presentation/feature/profile/cubit/profile_cubit.dart' as _i559;
 import '../presentation/feature/movie_detail/movie_detail_cubit.dart' as _i1058;
+import '../presentation/feature/profile/cubit/profile_cubit.dart' as _i559;
 import '../presentation/feature/search/search_cubit.dart' as _i962;
 import 'firebase_module.dart' as _i616;
 
@@ -94,11 +96,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i432.AuthRepository>(
       () => _i780.AuthRepositoryImp(gh<_i770.AuthRemoteDataSource>()),
     );
+    gh.lazySingleton<_i814.GetMovieDetailsByIdUserCase>(
+      () => _i814.GetMovieDetailsByIdUserCase(gh<_i603.MovieRepository>()),
+    );
     gh.lazySingleton<_i843.ProfileRepository>(
       () => _i941.ProfileRepositoryImp(gh<_i18.ProfileRemoteDataSource>()),
     );
-    gh.lazySingleton<_i814.GetMovieDetailsByIdUserCase>(
-      () => _i814.GetMovieDetailsByIdUserCase(gh<_i603.MovieRepository>()),
+    gh.lazySingleton<_i87.GetWishlistUseCase>(
+      () => _i87.GetWishlistUseCase(gh<_i843.ProfileRepository>()),
+    );
+    gh.lazySingleton<_i25.RemoveMovieFromWishlistUseCase>(
+      () => _i25.RemoveMovieFromWishlistUseCase(gh<_i843.ProfileRepository>()),
     );
     gh.lazySingleton<_i724.BrowseMoviesUseCase>(
       () => _i724.BrowseMoviesUseCase(
@@ -176,25 +184,29 @@ extension GetItInjectableX on _i174.GetIt {
         addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
       ),
     );
-    gh.factoryParam<_i372.BrowseCubit, String?, dynamic>(
-      (initialGenre, _) => _i372.BrowseCubit(
-        browseMoviesUseCase: gh<_i724.BrowseMoviesUseCase>(),
+    gh.factory<_i962.SearchCubit>(
+      () => _i962.SearchCubit(
+        searchMoviesUseCase: gh<_i762.SearchMoviesUseCase>(),
         addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
-        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
-        initialGenre: initialGenre,
       ),
     );
     gh.factory<_i1058.MovieDetailCubit>(
       () => _i1058.MovieDetailCubit(
         getMovieDetailsByIdUserCase: gh<_i814.GetMovieDetailsByIdUserCase>(),
         getSimilarMoviesUseCase: gh<_i910.GetSimilarMoviesUseCase>(),
+        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
+        getWishlistUseCase: gh<_i87.GetWishlistUseCase>(),
+        removeMovieFromWishlistUseCase:
+            gh<_i25.RemoveMovieFromWishlistUseCase>(),
         movieId: gh<int>(),
       ),
     );
-    gh.factory<_i962.SearchCubit>(
-      () => _i962.SearchCubit(
-        searchMoviesUseCase: gh<_i762.SearchMoviesUseCase>(),
+    gh.factoryParam<_i372.BrowseCubit, String?, dynamic>(
+      (initialGenre, _) => _i372.BrowseCubit(
+        browseMoviesUseCase: gh<_i724.BrowseMoviesUseCase>(),
         addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
+        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
+        initialGenre: initialGenre,
       ),
     );
     gh.factory<_i1060.AuthCubit>(

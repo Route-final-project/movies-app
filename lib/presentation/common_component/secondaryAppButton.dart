@@ -25,26 +25,23 @@ class SecondaryAppButton extends StatelessWidget {
         iconColor: WidgetStatePropertyAll(ColorsManager.white),
       ),
       onPressed: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (prefixIcon != null) ...[
-              Padding(
-                padding: EdgeInsetsDirectional.only(end: 11.w),
-                child: prefixIcon,
-              ),
-            ],
-            Text(text, style: Theme.of(context).textTheme.titleSmall),
-            if (suffixIcon != null) ...[
-              Padding(
-                padding: EdgeInsetsDirectional.only(start: 11.w),
-                child: suffixIcon,
-              ),
-            ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (prefixIcon != null) ...[
+            Padding(
+              padding: EdgeInsetsDirectional.only(end: 11.w),
+              child: prefixIcon,
+            ),
           ],
-        ),
+          Text(text, style: Theme.of(context).textTheme.titleSmall),
+          if (suffixIcon != null) ...[
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 11.w),
+              child: suffixIcon,
+            ),
+          ],
+        ],
       ),
     );
   }

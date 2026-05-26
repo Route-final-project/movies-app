@@ -12,7 +12,7 @@ class AddMovieToWishlistUseCase {
 
   final ProfileRepository profileRepository;
 
-  Future<Either<AppError, ProfileEntity>> call(MovieEntity movie) {
-    return profileRepository.addMovieToWishlist(movie);
+  Future<Either<AppError, void>> call(MovieEntity movie) async {
+    return await profileRepository.addMovieToWishlist(movie);
   }
 }

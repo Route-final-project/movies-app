@@ -16,6 +16,9 @@ import '../../../config/path_argument.dart';
 import '../../../core/resource/assets_manager.dart';
 import '../../../core/resource/routes_manager.dart';
 import '../../../dependency_injection/di.dart';
+import '../../../domain/usecase/add_movie_to_wishlist_use_case.dart';
+import '../../../domain/usecase/get_wishlist_use_case.dart';
+import '../../../domain/usecase/remove_movie_from_wishlist_use_case.dart';
 import '../home/movieCard.dart';
 
 class MovieDetailScreen extends StatelessWidget {
@@ -29,6 +32,9 @@ class MovieDetailScreen extends StatelessWidget {
       create: (context) => MovieDetailCubit(
         getMovieDetailsByIdUserCase: getIt<GetMovieDetailsByIdUserCase>(),
         getSimilarMoviesUseCase: getIt<GetSimilarMoviesUseCase>(),
+        addMovieToWishlistUseCase: getIt<AddMovieToWishlistUseCase>(),
+        getWishlistUseCase: getIt<GetWishlistUseCase>(),
+        removeMovieFromWishlistUseCase: getIt<RemoveMovieFromWishlistUseCase>(),
         movieId: movieId,
       ),
       child: BlocListener<MovieDetailCubit, MovieUiState>(
@@ -70,8 +76,8 @@ class MovieDetailScreen extends StatelessWidget {
                       BlocBuilder<MovieDetailCubit, MovieUiState>(
                         builder: (context, state) {
                           return InkWell(
-                            onTap: () {
-                              BlocProvider.of<MovieDetailCubit>(
+                            onTap: () async {
+                              await BlocProvider.of<MovieDetailCubit>(
                                 context,
                               ).toggleFavorite();
                             },

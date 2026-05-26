@@ -79,7 +79,6 @@ class SearchCubit extends Cubit<SearchState> {
     final result = await addMovieToHistoryUseCase(movie);
     result.fold(
       (error) {
-        print("==>erererer ${error.message}");
         emit(state.copyWith(errorMessage: error.message));
       },
       (_) => emit(state.copyWith(errorMessage: '')),

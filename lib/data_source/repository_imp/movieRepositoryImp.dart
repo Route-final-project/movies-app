@@ -49,7 +49,6 @@ class MovieRepositoryImp implements MovieRepository {
   Future<Either<AppError, MovieEntity>> getMovieDetailsById(int movieId) async {
     try{
       MovieDetail movieDetailResponse = await remoteDataSource.getMovieDetailsById(movieId);
-      print("==> movieDetailResponse: $movieDetailResponse");
       return Right(movieDetailResponse.toMovieEntity());
     } on RemoteAppException catch (e) {
       return Left(mapExceptionToError(e));

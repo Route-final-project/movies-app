@@ -1,6 +1,6 @@
 part of 'movie_detail_cubit.dart';
 
-class MovieUiState {
+class MovieUiState extends Equatable {
   final bool isLoading;
   final bool isSimilarMoviesLoading;
   final String errorMessage;
@@ -11,6 +11,7 @@ class MovieUiState {
   final MovieDetailUiState? details;
   final bool isFavorite;
   final List<MovieUiState> similarMovies;
+
   @override
   String toString() {
     return '''
@@ -38,15 +39,27 @@ MovieUiState(
     this.details,
   });
 
-  MovieUiState copyWith({String? trailerErrorMessage ,bool? isFavorite ,bool? isLoading, String? errorMessage, bool? isSimilarMoviesLoading, List<MovieUiState>? similarMovies}) {
+  MovieUiState copyWith({
+    String? trailerErrorMessage,
+    bool? isFavorite,
+    bool? isLoading,
+    String? errorMessage,
+    bool? isSimilarMoviesLoading,
+    int? id,
+    String? rating,
+    String? imageUrl,
+    MovieDetailUiState? details,
+    List<MovieUiState>? similarMovies,
+  }) {
     return MovieUiState(
       trailerErrorMessage: trailerErrorMessage ?? this.trailerErrorMessage,
-      isSimilarMoviesLoading: isSimilarMoviesLoading ?? this.isSimilarMoviesLoading,
+      isSimilarMoviesLoading:
+          isSimilarMoviesLoading ?? this.isSimilarMoviesLoading,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage ?? this.errorMessage,
-      id: id,
-      rating: rating,
-      imageUrl: imageUrl,
+      id: id ?? this.id,
+      rating: rating ?? this.rating,
+      imageUrl: imageUrl ?? this.imageUrl,
       details: details,
       similarMovies: similarMovies ?? this.similarMovies,
       isFavorite: isFavorite ?? this.isFavorite,
@@ -67,6 +80,20 @@ MovieUiState(
       trailerErrorMessage: '',
     );
   }
+
+  @override
+  List<Object?> get props => [
+    id,
+    rating,
+    imageUrl,
+    details,
+    isLoading,
+    isSimilarMoviesLoading,
+    errorMessage,
+    similarMovies,
+    isFavorite,
+    trailerErrorMessage,
+  ];
 }
 
 class MovieDetailUiState {

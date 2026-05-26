@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
+import 'package:movies/domain/app_error.dart';
 
 import '../../domain/entity/movie_entity.dart';
 import '../../domain/entity/profile_entity.dart';
@@ -52,16 +53,16 @@ class ProfileRemoteDataSourceImp implements ProfileRemoteDataSource {
     }
   }
 
-  Map<String, dynamic>? _mergeProfileData(
-    Map<String, dynamic>? remoteProfile,
-    Map<String, dynamic>? cachedProfile,
-  ) {
+  Map<String, dynamic>? _mergeProfileData(Map<String, dynamic>? remoteProfile,
+      Map<String, dynamic>? cachedProfile,) {
     if (remoteProfile == null) return cachedProfile;
     if (cachedProfile == null) return remoteProfile;
 
     return {
       ...remoteProfile,
-      if ((remoteProfile['phone'] as String?)?.trim().isNotEmpty != true)
+      if ((remoteProfile['phone'] as String?)
+          ?.trim()
+          .isNotEmpty != true)
         'phone': cachedProfile['phone'],
       if (remoteProfile['avatarId'] == null ||
           (remoteProfile['avatarId'] == 1 && cachedProfile['avatarId'] != null))
@@ -111,13 +112,19 @@ class ProfileRemoteDataSourceImp implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<ProfileEntity> addMovieToWishlist(MovieEntity movie) {
-    return _syncMovieList(collection: 'wishlist', movie: movie);
+  Future<void> addMovieToWishlist(MovieEntity movie) async {
+    try{
+      User user = _requireUser();
+      await _firestore.collection("users").doc(user.uid).collection("wishlist").doc(
+          movie.id.toString()).set(ProfileMapper.movieToJson(movie));
+    } on FirebaseException catch (_) {
+      throw NetworkError("Error adding movie to wishlist");
+    }
   }
 
   @override
-  Future<ProfileEntity> addMovieToHistory(MovieEntity movie) {
-    return _syncMovieList(collection: 'history', movie: movie);
+  Future<ProfileEntity> addMovieToHistory(MovieEntity movie) async {
+    return await _syncMovieList(collection: 'history', movie: movie);
   }
 
   Future<ProfileEntity> _syncMovieList({
@@ -131,7 +138,6 @@ class ProfileRemoteDataSourceImp implements ProfileRemoteDataSource {
         collection,
       ).doc('${movie.id}').set(ProfileMapper.movieToJson(movie));
     } on FirebaseException catch (error) {
-      print("==>erererer ${error.message}");
       throw FirebaseExceptionMapper.firestore(error);
     }
     return getProfile();
@@ -141,10 +147,8 @@ class ProfileRemoteDataSourceImp implements ProfileRemoteDataSource {
     return _firestore.collection('users').doc(uid);
   }
 
-  CollectionReference<Map<String, dynamic>> _movieCollection(
-    String uid,
-    String collection,
-  ) {
+  CollectionReference<Map<String, dynamic>> _movieCollection(String uid,
+      String collection,) {
     return _userDocument(uid).collection(collection);
   }
 
@@ -157,5 +161,31 @@ class ProfileRemoteDataSourceImp implements ProfileRemoteDataSource {
       );
     }
     return user;
+  }
+
+  @override
+  Future<void> removeMovieFromWishlist(int movieId) async {
+    try {
+      User user = _requireUser();
+      CollectionReference<Map<String, dynamic>> collection = _firestore.collection("users").doc(user.uid.toString()).collection("wishlist");
+      return await collection.doc('$movieId').delete();
+    } on FirebaseException catch (_) {
+      throw NetworkError("Error removing movie from wishlist");
+    }
+  }
+
+  @override
+  Future<List<int>> getWishlist() async {
+    try {
+      User user = _requireUser();
+      QuerySnapshot<Map<String, dynamic>> wishlistSnapShot = await _firestore
+          .collection('users').doc(user.uid).collection('wishlist').get();
+      List<int> wishListIds = wishlistSnapShot.docs
+          .map((e) => int.parse(e.id))
+          .toList();
+      return wishListIds;
+    } on FirebaseException catch (_) {
+      throw NetworkError("Error getting wishlist");
+    }
   }
 }
