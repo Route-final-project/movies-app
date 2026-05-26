@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../domain/entity/movie_entity.dart';
 import '../../../domain/usecase/add_movie_to_history_use_case.dart';
+import '../../../domain/usecase/add_movie_to_wishlist_use_case.dart';
 import '../../../domain/usecase/browse_movies_use_case.dart';
 
 part 'browse_state.dart';
@@ -13,6 +14,7 @@ class BrowseCubit extends Cubit<BrowseState> {
   BrowseCubit({
     required this.browseMoviesUseCase,
     required this.addMovieToHistoryUseCase,
+    required this.addMovieToWishlistUseCase,
     @factoryParam String? initialGenre,
   }) : super(BrowseState(selectedGenre: initialGenre ?? 'Action')) {
     scrollController.addListener(_onScroll);
@@ -21,6 +23,7 @@ class BrowseCubit extends Cubit<BrowseState> {
 
   final BrowseMoviesUseCase browseMoviesUseCase;
   final AddMovieToHistoryUseCase addMovieToHistoryUseCase;
+  final AddMovieToWishlistUseCase addMovieToWishlistUseCase;
   final ScrollController scrollController = ScrollController();
 
   static const int _limit = 20;
@@ -86,6 +89,14 @@ class BrowseCubit extends Cubit<BrowseState> {
     result.fold((_) {
       // History sync is best effort; browsing should stay uninterrupted.
     }, (_) => emit(state.copyWith(errorMessage: '')));
+  }
+
+  Future<void> addMovieToWishlist(MovieEntity movie) async {
+    final result = await addMovieToWishlistUseCase(movie);
+    result.fold(
+      (error) => emit(state.copyWith(errorMessage: error.message)),
+      (_) => emit(state.copyWith(errorMessage: '')),
+    );
   }
 
   void _onScroll() {

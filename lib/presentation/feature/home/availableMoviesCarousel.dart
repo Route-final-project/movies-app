@@ -12,11 +12,13 @@ class AvailableMoviesCarousel extends StatefulWidget {
   const AvailableMoviesCarousel({
     required this.movies,
     required this.onMovieClicked,
+    required this.onWishlistClicked,
     super.key,
   });
 
   final List<MovieEntity> movies;
   final Function(MovieEntity) onMovieClicked;
+  final Function(MovieEntity) onWishlistClicked;
 
   @override
   State<AvailableMoviesCarousel> createState() =>
@@ -36,10 +38,7 @@ class _AvailableMoviesCarouselState extends State<AvailableMoviesCarousel> {
         SizedBox(
           height: 600.h,
           width: double.infinity,
-          child: MoviePosterImage(
-            imageUrl: imageUrl,
-            fit: BoxFit.cover,
-          ),
+          child: MoviePosterImage(imageUrl: imageUrl, fit: BoxFit.cover),
         ),
         Container(
           height: 600.h,
@@ -65,6 +64,7 @@ class _AvailableMoviesCarouselState extends State<AvailableMoviesCarousel> {
                         onTap: (_) {
                           widget.onMovieClicked(e);
                         },
+                        onWishlistTap: () => widget.onWishlistClicked(e),
                       ),
                     )
                     .toList(),

@@ -156,18 +156,29 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i774.AvailableMoviesCubit(
         getLatestMoviesUseCase: gh<_i729.GetLatestMoviesUseCase>(),
         addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
+        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
       ),
     );
     gh.factory<_i284.HomeCategoryCubit>(
       () => _i284.HomeCategoryCubit(
         browseMoviesUseCase: gh<_i724.BrowseMoviesUseCase>(),
         addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
+        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
+      ),
+    );
+    gh.factoryParam<_i372.BrowseCubit, String?, dynamic>(
+      (initialGenre, _) => _i372.BrowseCubit(
+        browseMoviesUseCase: gh<_i724.BrowseMoviesUseCase>(),
+        addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
+        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
+        initialGenre: initialGenre,
       ),
     );
     gh.factory<_i962.SearchCubit>(
       () => _i962.SearchCubit(
         searchMoviesUseCase: gh<_i762.SearchMoviesUseCase>(),
         addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
+        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
       ),
     );
     gh.factory<_i1060.AuthCubit>(
@@ -176,13 +187,6 @@ extension GetItInjectableX on _i174.GetIt {
         googleSignInUseCase: gh<_i804.GoogleSignInUseCase>(),
         registerUseCase: gh<_i491.RegisterUseCase>(),
         forgetPasswordUseCase: gh<_i598.ForgetPasswordUseCase>(),
-      ),
-    );
-    gh.factoryParam<_i372.BrowseCubit, String?, dynamic>(
-      (initialGenre, _) => _i372.BrowseCubit(
-        browseMoviesUseCase: gh<_i724.BrowseMoviesUseCase>(),
-        addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
-        initialGenre: initialGenre,
       ),
     );
     gh.factory<_i559.ProfileCubit>(

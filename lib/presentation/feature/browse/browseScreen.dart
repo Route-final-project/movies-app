@@ -229,6 +229,8 @@ class _MoviesGrid extends StatelessWidget {
                 context.read<BrowseCubit>().recordMovieInHistory(movie);
                 // TODO: Navigate to movie details when a details route exists.
               },
+              onWishlistTap: () =>
+                  context.read<BrowseCubit>().addMovieToWishlist(movie),
             );
           },
         );

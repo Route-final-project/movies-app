@@ -8,6 +8,7 @@ class MovieCard extends StatelessWidget {
   const MovieCard({
     required this.movie,
     this.onTap,
+    this.onWishlistTap,
     this.compact = false,
     this.width,
     this.height,
@@ -23,6 +24,7 @@ class MovieCard extends StatelessWidget {
 
   final MovieEntity movie;
   final void Function(int id)? onTap;
+  final VoidCallback? onWishlistTap;
   final bool compact;
   final double? width;
   final double? height;
@@ -134,6 +136,27 @@ class MovieCard extends StatelessWidget {
                 ),
               ),
             ),
+            if (onWishlistTap != null)
+              Positioned(
+                right: badgeLeft ?? 11.w,
+                top: badgeTop ?? 11.h,
+                child: Material(
+                  color: ColorsManager.grey.withAlpha(180),
+                  borderRadius: BorderRadius.circular(10.r),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10.r),
+                    onTap: onWishlistTap,
+                    child: Padding(
+                      padding: EdgeInsets.all(6.r),
+                      child: Icon(
+                        Icons.bookmark_add_outlined,
+                        color: ColorsManager.gold,
+                        size: ratingIconSize ?? 18.r,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

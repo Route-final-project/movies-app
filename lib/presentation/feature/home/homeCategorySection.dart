@@ -133,6 +133,9 @@ class HomeCategorySection extends StatelessWidget {
                         );
                         // TODO: Navigate to movie details when a details route exists.
                       },
+                      onWishlistTap: () => context
+                          .read<HomeCategoryCubit>()
+                          .addMovieToWishlist(movie),
                     );
                   },
                 ),

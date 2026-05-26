@@ -91,6 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       onMovieClicked: (movie) => context
                           .read<AvailableMoviesCubit>()
                           .recordMovieInHistory(movie),
+                      onWishlistClicked: (movie) => context
+                          .read<AvailableMoviesCubit>()
+                          .addMovieToWishlist(movie),
                     );
                   }
                 },
