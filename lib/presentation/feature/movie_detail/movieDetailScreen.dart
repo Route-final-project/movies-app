@@ -40,17 +40,15 @@ class MovieDetailScreen extends StatelessWidget {
       child: BlocListener<MovieDetailCubit, MovieUiState>(
         listener: (context, state) {
           if (state.trailerErrorMessage.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.trailerErrorMessage)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.trailerErrorMessage)));
           }
         },
         child: BlocBuilder<MovieDetailCubit, MovieUiState>(
           builder: (context, state) {
             if (state.isLoading) {
-              return Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
             } else if (state.errorMessage.isNotEmpty) {
               Scaffold(body: Center(child: Text(state.errorMessage)));
             }
@@ -117,10 +115,7 @@ class MovieDetailScreen extends StatelessWidget {
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0x33121312),
-                                  Color(0xFF121312),
-                                ],
+                                colors: [Color(0x33121312), Color(0xFF121312)],
                               ),
                             ),
                           ),
@@ -150,9 +145,12 @@ class MovieDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           SizedBox(height: 10.h),
-                          Text(
-                            state.details?.title ?? "",
-                            textAlign: TextAlign.center,
+                          Visibility(
+                            visible: state.details?.title.isNotEmpty ?? false,
+                            child: Text(
+                              state.details?.title ?? "",
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                           SizedBox(height: 10.h),
                           Text(
@@ -188,10 +186,13 @@ class MovieDetailScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          TitleSection(title: "Screen Shots"),
-                          ...state.details?.screenshotImagesUrl.map((
-                                imageUrl,
-                              ) {
+                          Visibility(
+                            visible:
+                                state.details?.screenshotImagesUrl.isNotEmpty ??
+                                false,
+                            child: TitleSection(title: "Screen Shots"),
+                          ),
+                          ...state.details?.screenshotImagesUrl.map((imageUrl) {
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: ClipRRect(
@@ -230,8 +231,7 @@ class MovieDetailScreen extends StatelessWidget {
                                       crossAxisCount: 2,
                                     ),
                                 itemBuilder: (context, index) {
-                                  var currentMovie =
-                                      state.similarMovies[index];
+                                  var currentMovie = state.similarMovies[index];
                                   return MovieCard(
                                     onTap: (_) {
                                       Navigator.pushNamed(
@@ -249,18 +249,23 @@ class MovieDetailScreen extends StatelessWidget {
                               );
                             },
                           ),
-                          TitleSection(title: "Summary"),
+                          Visibility(
+                              visible: state.details?.summary.isNotEmpty ?? false,
+                              child: TitleSection(title: "Summary")),
                           Text(
                             state.details?.summary ?? "",
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
-                          TitleSection(title: "Cast"),
+                          Visibility(
+                              visible: state.details?.cast.isNotEmpty ?? false,
+                              child: TitleSection(title: "Cast")),
                           ...state.details?.cast.map((cast) {
                                 return CastMemberCard(cast: cast);
                               }) ??
                               [],
-                          TitleSection(title: "Genres"),
-
+                          Visibility(
+                              visible: state.details?.genres.isNotEmpty ?? false,
+                              child: TitleSection(title: "Genres")),
                           GridView.builder(
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
@@ -285,9 +290,7 @@ class MovieDetailScreen extends StatelessWidget {
                                 child: Text(
                                   state.details?.genres[index] ?? "",
                                   overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                               );
                             },
