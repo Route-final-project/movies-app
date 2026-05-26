@@ -8,6 +8,7 @@ import 'package:movies/presentation/feature/home/homeScreen.dart';
 import 'package:movies/presentation/mainAppScreen.dart';
 
 import '../../presentation/feature/movie_detail/movieDetailScreen.dart';
+import '../../presentation/feature/onboarding/onboarding_screen.dart';
 
 abstract class RoutesManger {
   static const String homeScreen = '/homeScreen';
@@ -16,8 +17,10 @@ abstract class RoutesManger {
   static const String forgetPasswordScreen = '/forgetPasswordScreen';
   static const String movieDetailScreen = '/movieDetailScreen';
   static const String mainAppScreenRoute = "/mainAppScreenRoute";
+  static const String onboarding = "/onboarding";
 
   static Map<String, WidgetBuilder> routes = {
+    onboarding: (_) => const OnboardingScreen(),
     homeScreen: (_) => HomeScreen(),
     loginScreen: (_) => const LoginScreen(),
     registerScreen: (_) => const RegisterScreen(),
