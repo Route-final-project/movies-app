@@ -1,20 +1,38 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies/core/resource/colors_manager.dart';
 import 'package:movies/domain/entity/movie_entity.dart';
+import 'package:movies/presentation/common_component/moviePosterImage.dart';
 
 class MovieCard extends StatelessWidget {
   const MovieCard({
     required this.movie,
     this.onTap,
     this.compact = false,
+    this.width,
+    this.height,
+    this.borderRadius,
+    this.badgeLeft,
+    this.badgeTop,
+    this.badgePadding,
+    this.ratingIconSize,
+    this.ratingTextStyle,
+    this.fit,
     super.key,
   });
 
   final MovieEntity movie;
   final void Function(int id)? onTap;
   final bool compact;
+  final double? width;
+  final double? height;
+  final double? borderRadius;
+  final double? badgeLeft;
+  final double? badgeTop;
+  final EdgeInsetsGeometry? badgePadding;
+  final double? ratingIconSize;
+  final TextStyle? ratingTextStyle;
+  final BoxFit? fit;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +42,13 @@ class MovieCard extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: CachedNetworkImage(
+              child: MoviePosterImage(
                 imageUrl: movie.imageUrl,
                 fit: BoxFit.cover,
-                placeholder: (_, _) => const Center(
+                placeholder: const Center(
                   child: CircularProgressIndicator(color: ColorsManager.gold),
                 ),
-                errorWidget: (_, _, _) => const ColoredBox(
+                errorWidget: const ColoredBox(
                   color: ColorsManager.grey,
                   child: Icon(Icons.broken_image_outlined),
                 ),
@@ -66,25 +84,27 @@ class MovieCard extends StatelessWidget {
     return InkWell(
       onTap: onTap == null ? null : () => onTap!(movie.id),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(borderRadius ?? 20.r),
         clipBehavior: Clip.hardEdge,
         child: Stack(
           alignment: Alignment.topLeft,
           children: [
-            CachedNetworkImage(
-              scale: 1.0,
-              height: 350.h,
-              width: 235.w,
+            MoviePosterImage(
+              height: height ?? 350.h,
+              width: width ?? 235.w,
               imageUrl: movie.imageUrl,
-              placeholder: (context, url) =>
-                  Center(child: const CircularProgressIndicator()),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              fit: BoxFit.cover,
+              placeholder: const Center(child: CircularProgressIndicator()),
+              errorWidget: const Icon(Icons.error),
+              fit: fit ?? BoxFit.cover,
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(11.0),
+            Positioned(
+              left: badgeLeft ?? 11.w,
+              top: badgeTop ?? 11.h,
               child: Container(
+                padding:
+                    badgePadding ??
+                    EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
                 decoration: BoxDecoration(
                   color: ColorsManager.grey.withAlpha(180),
                   borderRadius: BorderRadius.circular(10.r),
@@ -93,17 +113,23 @@ class MovieCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: EdgeInsets.zero,
                       child: Text(
-                        movie.rating.toString(),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: ColorsManager.white,
-                        ),
+                        movie.rating.toStringAsFixed(1),
+                        style:
+                            ratingTextStyle ??
+                            Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: ColorsManager.white,
+                            ),
                       ),
                     ),
 
-                    Icon(Icons.star, color: ColorsManager.gold, size: 18.r),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 2.w),
+                    Icon(
+                      Icons.star,
+                      color: ColorsManager.gold,
+                      size: ratingIconSize ?? 18.r,
+                    ),
                   ],
                 ),
               ),

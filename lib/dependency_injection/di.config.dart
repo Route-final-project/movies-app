@@ -33,6 +33,7 @@ import '../domain/repository_interface/movieRepository.dart' as _i603;
 import '../domain/repository_interface/profile_repository.dart' as _i843;
 import '../domain/usecase/add_movie_to_history_use_case.dart' as _i165;
 import '../domain/usecase/add_movie_to_wishlist_use_case.dart' as _i397;
+import '../domain/usecase/browse_movies_use_case.dart' as _i724;
 import '../domain/usecase/delete_account_use_case.dart' as _i895;
 import '../domain/usecase/forget_password_use_case.dart' as _i598;
 import '../domain/usecase/get_latest_movies_use_case.dart' as _i729;
@@ -44,8 +45,11 @@ import '../domain/usecase/sign_in_use_case.dart' as _i50;
 import '../domain/usecase/sign_out_use_case.dart' as _i885;
 import '../domain/usecase/update_profile_use_case.dart' as _i74;
 import '../presentation/feature/auth/cubit/auth_cubit.dart' as _i1060;
+import '../presentation/feature/browse/browse_cubit.dart' as _i372;
 import '../presentation/feature/home/available_movies_cubit/available_movies_cubit.dart'
     as _i774;
+import '../presentation/feature/home/home_category_cubit/home_category_cubit.dart'
+    as _i284;
 import '../presentation/feature/profile/cubit/profile_cubit.dart' as _i559;
 import '../presentation/feature/search/search_cubit.dart' as _i962;
 import 'firebase_module.dart' as _i616;
@@ -89,6 +93,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i843.ProfileRepository>(
       () => _i941.ProfileRepositoryImp(gh<_i18.ProfileRemoteDataSource>()),
+    );
+    gh.lazySingleton<_i724.BrowseMoviesUseCase>(
+      () => _i724.BrowseMoviesUseCase(
+        movieRepository: gh<_i603.MovieRepository>(),
+      ),
     );
     gh.lazySingleton<_i729.GetLatestMoviesUseCase>(
       () => _i729.GetLatestMoviesUseCase(
@@ -149,6 +158,12 @@ extension GetItInjectableX on _i174.GetIt {
         addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
       ),
     );
+    gh.factory<_i284.HomeCategoryCubit>(
+      () => _i284.HomeCategoryCubit(
+        browseMoviesUseCase: gh<_i724.BrowseMoviesUseCase>(),
+        addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
+      ),
+    );
     gh.factory<_i962.SearchCubit>(
       () => _i962.SearchCubit(
         searchMoviesUseCase: gh<_i762.SearchMoviesUseCase>(),
@@ -161,6 +176,13 @@ extension GetItInjectableX on _i174.GetIt {
         googleSignInUseCase: gh<_i804.GoogleSignInUseCase>(),
         registerUseCase: gh<_i491.RegisterUseCase>(),
         forgetPasswordUseCase: gh<_i598.ForgetPasswordUseCase>(),
+      ),
+    );
+    gh.factoryParam<_i372.BrowseCubit, String?, dynamic>(
+      (initialGenre, _) => _i372.BrowseCubit(
+        browseMoviesUseCase: gh<_i724.BrowseMoviesUseCase>(),
+        addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
+        initialGenre: initialGenre,
       ),
     );
     gh.factory<_i559.ProfileCubit>(

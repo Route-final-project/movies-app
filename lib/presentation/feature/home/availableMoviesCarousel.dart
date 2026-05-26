@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +5,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../core/resource/assets_manager.dart';
 import '../../../domain/entity/movie_entity.dart';
+import '../../common_component/moviePosterImage.dart';
 import 'movieCard.dart';
 
 class AvailableMoviesCarousel extends StatefulWidget {
@@ -33,13 +33,12 @@ class _AvailableMoviesCarouselState extends State<AvailableMoviesCarousel> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Container(
+        SizedBox(
           height: 600.h,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(imageUrl),
-              fit: BoxFit.fill,
-            ),
+          width: double.infinity,
+          child: MoviePosterImage(
+            imageUrl: imageUrl,
+            fit: BoxFit.cover,
           ),
         ),
         Container(
