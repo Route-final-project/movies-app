@@ -5,15 +5,16 @@ import '../entity/movie_entity.dart';
 
 abstract class MovieRepository {
   Future<Either<AppError, List<MovieEntity>>> getLatestMovies();
-  Future<Either<AppError, List<MovieEntity>>> searchMovies(
-    String query,
-    int page,
-  );
-  Future<Either<AppError, List<MovieEntity>>> browseMoviesByGenre(
-    String genre,
-    int page, {
-    int limit = 20,
-  });
-  Future<Either<AppError,MovieEntity>> getMovieDetailsById(int movieId);
-  Future<Either<AppError,List<MovieEntity>>> getSimilarMovies(int movieId);
+
+  Future<Either<AppError, List<MovieEntity>>> searchMovies(String query,
+      int page,);
+
+  Future<Either<AppError, List<MovieEntity>>> browseMoviesByGenre(String genre,
+      int page, {
+        int limit = 20,
+      });
+
+  Future<Either<AppError, MovieEntity>> getMovieDetailsById(int movieId);
+
+  Future<Either<AppError, List<MovieEntity>>> getSimilarMovies(int movieId);
 }

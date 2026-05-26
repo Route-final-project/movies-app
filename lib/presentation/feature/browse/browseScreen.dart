@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../config/path_argument.dart';
 import '../../../core/resource/colors_manager.dart';
+import '../../../core/resource/routes_manager.dart';
 import '../../../dependency_injection/di.dart';
 import '../../../config/movie_genres.dart';
 import '../home/movieCard.dart';
+import '../movie_detail/movie_entity_extesion.dart';
 import 'browse_cubit.dart';
 
 class BrowseScreen extends StatelessWidget {
@@ -27,19 +30,21 @@ class _BrowseView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: ColorsManager.black,
-      child: Padding(
-        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 18.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _BrowseHeader(),
-            SizedBox(height: 12.h),
-            const _GenreChips(),
-            SizedBox(height: 14.h),
-            const Expanded(child: _MoviesGrid()),
-          ],
+    return SafeArea(
+      child: Material(
+        color: ColorsManager.black,
+        child: Padding(
+          padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 18.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _BrowseHeader(),
+              SizedBox(height: 12.h),
+              const _GenreChips(),
+              SizedBox(height: 14.h),
+              const Expanded(child: _MoviesGrid()),
+            ],
+          ),
         ),
       ),
     );
@@ -210,27 +215,15 @@ class _MoviesGrid extends StatelessWidget {
 
             final movie = state.movies[index];
             return MovieCard(
-              movie: movie,
-              width: double.infinity,
-              height: double.infinity,
-              borderRadius: 10.r,
-              badgeLeft: 6.w,
-              badgeTop: 8.h,
-              badgePadding: EdgeInsets.symmetric(
-                horizontal: 4.w,
-                vertical: 2.h,
-              ),
-              ratingIconSize: 14.r,
-              ratingTextStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: ColorsManager.white,
-                fontWeight: FontWeight.w400,
-              ),
-              onTap: (_) {
-                context.read<BrowseCubit>().recordMovieInHistory(movie);
-                // TODO: Navigate to movie details when a details route exists.
+              movie: movie.toUiState(),
+              onTap: (_) async {
+                await context.read<BrowseCubit>().recordMovieInHistory(movie);
+                Navigator.pushNamed(
+                  context,
+                  RoutesManger.movieDetailScreen,
+                  arguments: {PathArguments.movieId: movie.id},
+                );
               },
-              onWishlistTap: () =>
-                  context.read<BrowseCubit>().addMovieToWishlist(movie),
             );
           },
         );

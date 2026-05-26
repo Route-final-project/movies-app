@@ -15,11 +15,9 @@ class AvailableMoviesCubit extends Cubit<AvailableMoviesState> {
   AvailableMoviesCubit({
     required this.getLatestMoviesUseCase,
     required this.addMovieToHistoryUseCase,
-    required this.addMovieToWishlistUseCase,
   }) : super(AvailableMoviesState());
   final GetLatestMoviesUseCase getLatestMoviesUseCase;
   final AddMovieToHistoryUseCase addMovieToHistoryUseCase;
-  final AddMovieToWishlistUseCase addMovieToWishlistUseCase;
 
   void getAvailableMovies() async {
     emit(state.copyWith(isLoading: true));
@@ -69,11 +67,4 @@ class AvailableMoviesCubit extends Cubit<AvailableMoviesState> {
     );
   }
 
-  Future<void> addMovieToWishlist(MovieEntity movie) async {
-    final result = await addMovieToWishlistUseCase(movie);
-    result.fold(
-      (error) => emit(state.copyWith(errorMessage: error.message)),
-      (_) => emit(state.copyWith(errorMessage: '')),
-    );
-  }
 }

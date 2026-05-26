@@ -167,7 +167,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i774.AvailableMoviesCubit(
         getLatestMoviesUseCase: gh<_i729.GetLatestMoviesUseCase>(),
         addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
-        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
       ),
     );
     gh.factory<_i284.HomeCategoryCubit>(
@@ -196,7 +195,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i962.SearchCubit(
         searchMoviesUseCase: gh<_i762.SearchMoviesUseCase>(),
         addMovieToHistoryUseCase: gh<_i165.AddMovieToHistoryUseCase>(),
-        addMovieToWishlistUseCase: gh<_i397.AddMovieToWishlistUseCase>(),
       ),
     );
     gh.factory<_i1060.AuthCubit>(

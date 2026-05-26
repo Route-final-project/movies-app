@@ -16,7 +16,6 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit({
     required this.searchMoviesUseCase,
     required this.addMovieToHistoryUseCase,
-    required this.addMovieToWishlistUseCase,
   }) : super(SearchState(movies: [])) {
     controller.addListener(() {
       if (controller.text.trim() == state.query) {
@@ -40,7 +39,6 @@ class SearchCubit extends Cubit<SearchState> {
 
   final SearchMoviesUseCase searchMoviesUseCase;
   final AddMovieToHistoryUseCase addMovieToHistoryUseCase;
-  final AddMovieToWishlistUseCase addMovieToWishlistUseCase;
   TextEditingController controller = TextEditingController();
   ScrollController scrollController = ScrollController();
   int page = 1;
@@ -84,14 +82,6 @@ class SearchCubit extends Cubit<SearchState> {
         print("==>erererer ${error.message}");
         emit(state.copyWith(errorMessage: error.message));
       },
-      (_) => emit(state.copyWith(errorMessage: '')),
-    );
-  }
-
-  Future<void> addMovieToWishlist(MovieEntity movie) async {
-    final result = await addMovieToWishlistUseCase(movie);
-    result.fold(
-      (error) => emit(state.copyWith(errorMessage: error.message)),
       (_) => emit(state.copyWith(errorMessage: '')),
     );
   }
