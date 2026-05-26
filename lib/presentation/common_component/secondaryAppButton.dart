@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,14 +7,15 @@ class SecondaryAppButton extends StatelessWidget {
   const SecondaryAppButton({
     required this.text,
     required this.onPressed,
-    this.suffixIcon = const SizedBox(),
-    this.prefixIcon = const SizedBox(),
-    super.key});
+    this.suffixIcon,
+    this.prefixIcon,
+    super.key,
+  });
 
   final String text;
   final VoidCallback onPressed;
-  final Widget suffixIcon;
-  final Widget prefixIcon;
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -31,15 +30,19 @@ class SecondaryAppButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: EdgeInsetsDirectional.only(end: 11.w),
-              child: prefixIcon,
-            ),
+            if (prefixIcon != null) ...[
+              Padding(
+                padding: EdgeInsetsDirectional.only(end: 11.w),
+                child: prefixIcon,
+              ),
+            ],
             Text(text, style: Theme.of(context).textTheme.titleSmall),
-            Padding(
-              padding: EdgeInsetsDirectional.only(start: 11.w),
-              child: suffixIcon,
-            ),
+            if (suffixIcon != null) ...[
+              Padding(
+                padding: EdgeInsetsDirectional.only(start: 11.w),
+                child: suffixIcon,
+              ),
+            ],
           ],
         ),
       ),

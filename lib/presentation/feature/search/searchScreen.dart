@@ -11,6 +11,7 @@ import 'package:movies/presentation/feature/search/search_cubit.dart';
 
 import '../../../config/path_argument.dart';
 import '../../../core/resource/assets_manager.dart';
+import '../../../domain/usecase/add_movie_to_history_use_case.dart';
 import '../../../domain/usecase/search_movies_use_case.dart';
 import '../home/movieCard.dart';
 
@@ -41,8 +42,10 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          SearchCubit(searchMoviesUseCase: getIt<SearchMoviesUseCase>()),
+      create: (context) => SearchCubit(
+        searchMoviesUseCase: getIt<SearchMoviesUseCase>(),
+        addMovieToHistoryUseCase: getIt<AddMovieToHistoryUseCase>(),
+      ),
       child: Column(
         children: [
           BlocBuilder<SearchCubit, SearchState>(
@@ -104,12 +107,14 @@ class _SearchScreenState extends State<SearchScreen> {
                         movie: state.movies[index].toUiState(),
                         onTap: (int id) {
                           FocusScope.of(context).unfocus();
+                          context
+                              .read<SearchCubit>()
+                              .recordMovieInHistory(state.movies[index]);
                           Navigator.of(context).pushNamed(
                             RoutesManger.movieDetailScreen,
                             arguments: {PathArguments.movieId: state.movies[index].id},
                           );
                         },
-                      );
                     },
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(

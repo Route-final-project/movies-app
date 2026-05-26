@@ -17,11 +17,16 @@ class MainAppScreen extends StatefulWidget {
 
 class _MainAppScreenState extends State<MainAppScreen> {
   int _currentIndex = 0;
-  final List<Widget> _screens = [
-    HomeScreen(),
-    SearchScreen(),
-    BrowseScreen(),
-    ProfileScreen(),
+  Key _profileKey = UniqueKey();
+  late final Widget _homeScreen = const HomeScreen();
+  late final Widget _searchScreen = const SearchScreen();
+  late final Widget _browseScreen = const BrowseScreen();
+
+  List<Widget> get _screens => [
+    _homeScreen,
+    _searchScreen,
+    _browseScreen,
+    ProfileScreen(key: _profileKey),
   ];
 
   @override
@@ -36,6 +41,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
           onDestinationSelected: (index) {
             FocusScope.of(context).unfocus();
             setState(() {
+              if (index == 3) {
+                _profileKey = UniqueKey();
+              }
               _currentIndex = index;
             });
           },

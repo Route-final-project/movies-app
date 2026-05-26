@@ -27,8 +27,10 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(isLoading: true, errorMessage: '', isSuccess: false));
     final result = await signInUseCase(email: email, password: password);
     result.fold(
-      (error) => emit(state.copyWith(isLoading: false, errorMessage: error.message)),
-      (user) => emit(state.copyWith(isLoading: false, isSuccess: true, user: user)),
+      (error) =>
+          emit(state.copyWith(isLoading: false, errorMessage: error.message)),
+      (user) =>
+          emit(state.copyWith(isLoading: false, isSuccess: true, user: user)),
     );
   }
 
@@ -36,17 +38,33 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(isLoading: true, errorMessage: '', isSuccess: false));
     final result = await googleSignInUseCase();
     result.fold(
-      (error) => emit(state.copyWith(isLoading: false, errorMessage: error.message)),
-      (user) => emit(state.copyWith(isLoading: false, isSuccess: true, user: user)),
+      (error) =>
+          emit(state.copyWith(isLoading: false, errorMessage: error.message)),
+      (user) =>
+          emit(state.copyWith(isLoading: false, isSuccess: true, user: user)),
     );
   }
 
-  void register(String name, String email, String password) async {
+  void register(
+    String name,
+    String email,
+    String password,
+    String phone,
+    int avatarId,
+  ) async {
     emit(state.copyWith(isLoading: true, errorMessage: '', isSuccess: false));
-    final result = await registerUseCase(name: name, email: email, password: password);
+    final result = await registerUseCase(
+      name: name,
+      email: email,
+      password: password,
+      phone: phone,
+      avatarId: avatarId,
+    );
     result.fold(
-      (error) => emit(state.copyWith(isLoading: false, errorMessage: error.message)),
-      (user) => emit(state.copyWith(isLoading: false, isSuccess: true, user: user)),
+      (error) =>
+          emit(state.copyWith(isLoading: false, errorMessage: error.message)),
+      (user) =>
+          emit(state.copyWith(isLoading: false, isSuccess: true, user: user)),
     );
   }
 
@@ -54,7 +72,8 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(isLoading: true, errorMessage: '', isSuccess: false));
     final result = await forgetPasswordUseCase(email: email);
     result.fold(
-      (error) => emit(state.copyWith(isLoading: false, errorMessage: error.message)),
+      (error) =>
+          emit(state.copyWith(isLoading: false, errorMessage: error.message)),
       (_) => emit(state.copyWith(isLoading: false, isSuccess: true)),
     );
   }

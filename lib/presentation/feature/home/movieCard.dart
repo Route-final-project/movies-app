@@ -6,15 +6,66 @@ import 'package:movies/domain/entity/movie_entity.dart';
 import 'package:movies/presentation/feature/movie_detail/movie_detail_cubit.dart';
 
 class MovieCard extends StatelessWidget {
-  const MovieCard({required this.movie, required this.onTap, super.key});
+  const MovieCard({
+    required this.movie,
+    this.onTap,
+    this.compact = false,
+    super.key,
+  });
 
+  final bool compact;
   final MovieUiState movie;
   final void Function(int id) onTap;
 
   @override
   Widget build(BuildContext context) {
+    if (compact) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(11.r),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: CachedNetworkImage(
+                imageUrl: movie.imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (_, _) => const Center(
+                  child: CircularProgressIndicator(color: ColorsManager.gold),
+                ),
+                errorWidget: (_, _, _) => const ColoredBox(
+                  color: ColorsManager.grey,
+                  child: Icon(Icons.broken_image_outlined),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 5.w,
+              top: 5.h,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
+                decoration: BoxDecoration(
+                  color: ColorsManager.grey.withValues(alpha: .8),
+                  borderRadius: BorderRadius.circular(7.r),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      movie.rating.toStringAsFixed(1),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    SizedBox(width: 2.w),
+                    Icon(Icons.star, color: ColorsManager.gold, size: 12.r),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return InkWell(
-      onTap: () => onTap(movie.id),
+      onTap: onTap == null ? null : () => onTap!(movie.id),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.r),
         clipBehavior: Clip.hardEdge,
