@@ -17,7 +17,6 @@ class ProfileRemoteDataSourceImp implements ProfileRemoteDataSource {
 
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
-  static const Duration _cachedReadTimeout = Duration(milliseconds: 300);
   static const Duration _readTimeout = Duration(seconds: 5);
   static const Duration _writeTimeout = Duration(seconds: 10);
 
@@ -30,7 +29,7 @@ class ProfileRemoteDataSourceImp implements ProfileRemoteDataSource {
         _userDocument(user.uid).get(),
         _movieCollection(user.uid, 'wishlist').get(),
         _movieCollection(user.uid, 'history').get(),
-      ]).timeout(cachedProfile == null ? _readTimeout : _cachedReadTimeout);
+      ]).timeout(_readTimeout);
       final profile = results[0] as DocumentSnapshot<Map<String, dynamic>>;
       final wishlist = results[1] as QuerySnapshot<Map<String, dynamic>>;
       final history = results[2] as QuerySnapshot<Map<String, dynamic>>;

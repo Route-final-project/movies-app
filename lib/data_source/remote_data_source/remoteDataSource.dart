@@ -13,7 +13,6 @@ class RemoteDataSource {
   final Dio dio;
   RemoteDataSource(this.dio);
 
-
   Future<List<Movie>> getLatestMovies() async {
     Response response;
     try {
@@ -44,7 +43,35 @@ class RemoteDataSource {
           "limit": 20,
           "sort_by": "date_added",
           "order_by": "desc",
-          "query_term": query
+          "query_term": query,
+        },
+      );
+      MoviesListResponse moviesListResponse = MoviesListResponse.fromJson(
+        response.data,
+      );
+      return moviesListResponse.data?.movies ?? [];
+    } on SocketException catch (_) {
+      throw NoInternetException('No Internet Connection');
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    } on Exception catch (_) {
+      throw RemoteException('Network error');
+    }
+  }
+
+  Future<List<Movie>> browseMoviesByGenre(
+    String genre,
+    int page, {
+    int limit = 20,
+  }) async {
+    Response response;
+    try {
+      response = await dio.get(
+        AppConstants.moviesListEndpoint,
+        queryParameters: {
+          "genre": genre.toLowerCase(),
+          "page": page,
+          "limit": limit,
         },
       );
       MoviesListResponse moviesListResponse = MoviesListResponse.fromJson(

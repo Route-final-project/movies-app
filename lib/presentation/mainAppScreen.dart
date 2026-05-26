@@ -17,13 +17,13 @@ class MainAppScreen extends StatefulWidget {
 
 class _MainAppScreenState extends State<MainAppScreen> {
   int _currentIndex = 0;
+  int _homeRefreshToken = 0;
   Key _profileKey = UniqueKey();
-  late final Widget _homeScreen = const HomeScreen();
   late final Widget _searchScreen = const SearchScreen();
   late final Widget _browseScreen = const BrowseScreen();
 
   List<Widget> get _screens => [
-    _homeScreen,
+    HomeScreen(refreshToken: _homeRefreshToken),
     _searchScreen,
     _browseScreen,
     ProfileScreen(key: _profileKey),
@@ -40,6 +40,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
           currentIndex: _currentIndex,
           onDestinationSelected: (index) {
             setState(() {
+              if (index == 0 && _currentIndex != 0) {
+                _homeRefreshToken++;
+              }
               if (index == 3) {
                 _profileKey = UniqueKey();
               }
